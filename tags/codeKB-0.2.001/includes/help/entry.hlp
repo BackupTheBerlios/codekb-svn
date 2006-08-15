@@ -1,0 +1,50 @@
+[url=help.php]Help index[/url]
+
+[anker=top]
+[size=6]Entries[/size]
+[list]
+[*][url=#usage]Usage[/url]
+[*][url=#add]Adding entries[/url]
+[*][url=#change]Modifying entries[/url]
+[*][url=#link]Re/Unlink entries[/url]
+
+
+[/list]
+[--]
+[anker=usage][url=#top]^Top[/url]
+
+[b]Usage[/b]
+
+Entries contain that stuff you are using codeKB for. An entry consists of a short description, a documenation and attached [url=help.php?on=file]files[/url]. 
+You can access an entry by going to one of its [url=help.php?on=category]categories[/url] or by [url=help.php?on=search]searching[/url] for them.
+[--]
+[anker=view][url=#top]^Top[/url]
+
+[b]Adding entries[/b]
+
+To add a new entry, go to the [url=help.php?on=category]category[/url] you want that entry to be in. Note that you have to have sufficient access [url=help.php?on=rights]rights[/url] to add new entries.
+After selecting 'Add entry' in the menu you can enter title, author, description, documenation and an icon for the new entry.
+Because entries can be [url=#relink]linked[/url] more than once the title does not have to be unique. Therefore you should give it a good description to avoid having dozens of entries called 'patch' in one category.
+All fields except title are optional but when you leave the author field blank your username will be inserted.
+The short description can contain 255 chars, the documentation field should take a few GB of data - so feel free to write a lot.
+HTML will be ignored in all fields but you can format your documentation text by using [url=help.php?on=bbcode]bbcode[/url] (go there to learn about all supported keywords).
+You can see a preview of your new entry by clicking on 'Preview'.
+After adding the entry you'll see the [url=#change]modify[/url] menu.
+[--]
+[anker=change][url=#top]^Top[/url]
+
+[b]Change entries[/b]
+
+In the change menu you can select to modify an entries' description, documentation, etc. You can select the [url=#link]re/unlink[/url] dialog and you can go to the [url=help.php?on=file]attachment[/url] managment where you can add or remove files belonging to that entry.
+
+[--]
+[anker=link][url=#top]^Top[/url]
+
+[b]Re/Unlink entries[/b]
+
+You can place one entry in as many [url=help.php?on=category]categories[/url] you want by adding new links. Go to the entry and select 'Re/Unlink' from the menu.
+Choose a category to create a new link - an entry can only be linked once in the same category - or select existing links you want to remove.
+In case you remove all links the entry will be deleted completly!
+In both cases you need sufficient access [url=help.php?on=rights]rights[/url].
+
+[--]

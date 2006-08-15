@@ -1,0 +1,490 @@
+
+/* Some general definitions */
+html, body {
+	
+	font-family: "Verdana", "Arial", sans-serif;
+	background-color: rgb(255,255,255);
+	color: rgb(0,0,0);
+	font-size: 10pt;
+	height: 100%;
+	margin: 0px;
+	padding: 0px;
+}
+
+a {
+
+	color: rgb(130, 130, 130);
+	text-decoration: underline;
+}
+
+a:hover {
+
+	color: rgb(160, 160, 160);
+	text-decoration: underline;
+}
+
+.link1 a {
+
+	color: rgb(100, 100, 100);
+	text-decoration: underline;
+}
+
+.link1 a:hover {
+
+	color: rgb(150, 150, 150);
+	text-decoration: none;
+}
+
+.link2 a {
+
+	color: rgb(60, 60, 60);
+	text-decoration: none;
+}
+
+.link2 a:hover {
+
+	color: rgb(60, 60, 60);
+	text-decoration: underline;
+}
+
+/* Canvas around the page */
+#canvas {
+
+	position: relative;
+	padding: 0px;
+	margin: 0px;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+} 
+
+/* Header */
+#header {
+
+	position: relative;
+	padding: 0px;
+	height: 73px;
+	width: 100%; 
+}
+
+/* Header left with logo */
+#head_left {
+	
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 73px;
+	width: 447px;
+	background-color: rgb(255,255,255);
+	background-image: url(images/head_left.png);
+	background-repeat: no-repeat;
+	background-position: left;
+}
+
+/* Header center with title */
+#head_center {
+	
+	position: absolute;
+	top: 30px;
+	width: 50%;
+	left: 25%;
+	right: 25%;
+	font-family: "Courier New", monospace;
+	font-size: larger;
+	font-weight: bold;
+	text-align: center;
+}
+
+/* Header right with graphic */
+#head_right {
+	
+	position: absolute;
+	top: 0px;
+	right: 0px;
+	height: 73px;
+	width: 278px;
+	background-color: rgb(255,255,255);
+	background-image: url(images/head_right.png);
+	background-repeat: no-repeat;
+	background-position: right;
+}
+
+/* Menu bar above content */
+#menu {
+
+	position: relative;
+	top: 1px;
+	height: 22px;
+	border-top: 1px solid rgb(200, 200, 200);
+	border-bottom: 3px double rgb(200, 200, 200);
+	padding-left: 5px;
+	padding-right: 5px;
+
+}
+
+/* Now the page content */
+#content {
+
+	position: relative;
+	top: 2px;
+	padding: 5px;
+}
+
+/* Page footer */
+#footer {
+
+	position: absolute;	
+	left: 1px;
+	right: 1px;
+	width: auto !important;
+	width: 100%;
+	bottom: 0px;
+	border-top: 3px double rgb(200, 200, 200);
+	background-color: rgb (255, 255, 255);
+	padding-left: 5px;
+	height: 22px; 
+}
+
+#help {
+	
+	width: 90%;
+	margin: auto;
+}
+
+/* Definitions for forms */
+.forms {
+
+	width: 70%;
+	margin: auto;
+}
+
+.forms fieldset {
+
+	border: 1px solid rgb(150, 150, 150);
+	padding: 10px; 
+}
+
+.forms label {
+
+	float: left;
+	width: 50%;
+	text-align: right;
+	margin-right: 3px;
+	display: block;
+}
+
+.forms input {
+
+	color: rgb(0, 0, 0);
+	background: rgb(245, 245, 245);
+	border: 1px solid rgb(0,0,0);
+	margin-bottom: 2px;
+	padding: 1px;
+}
+
+.forms input.radio {
+
+	border: 0px;
+	margin-bottom: 0px;
+	padding: 0px;
+	width: auto;
+}
+
+.forms input.button {
+
+	margin-bottom: 0px;
+	padding: 1px;
+	padding-left: 3px;
+	padding-right: 3px;
+	width: auto;
+}
+
+.forms input.file {
+
+	width: auto;
+	background: rgb(245, 245, 245);
+	border: 0px;
+}
+
+.forms textarea {
+
+	color: rgb(0, 0, 0);
+	background: rgb(245, 245, 245);
+	border: 1px solid rgb(0,0,0);
+	margin-bottom: 2px;
+	padding: 1px;
+}
+
+.forms select {
+
+	color: rgb(0, 0, 0);
+	background: rgb(245, 245, 245);
+	border: 1px solid rgb(0,0,0);
+	margin-bottom: 2px;
+	padding: 1px;
+}
+
+.forms legend {
+	font-variant: small-caps;
+	color: rgb(130, 130, 130);
+	padding: 0px 3px;
+}
+
+/* Alternate forms layout */
+
+.forms2 label {
+
+	font-size: x-small;
+	float: none; 
+	text-align: left;
+}
+
+.forms2 input {
+
+	width: 90%;
+}
+
+.forms2 textarea {
+
+	width: 99%;
+	height: 250px;
+}
+
+
+/* BBCode */
+.bb_codebox {
+
+	width: 90%;
+	margin: auto;
+}
+
+.bb_codebox th {
+
+	font-size: xx-small;
+	text-align: left;
+}
+
+.bb_codebox td {
+	
+	font-family: monospace; 
+	background: rgb(235, 235, 235); 
+	border: 1px dashed rgb(0,0,0);
+	overflow: auto;
+}
+
+
+/* Search layout */
+.search {
+	
+	width: 80%;
+	margin: auto;
+	border: 1px solid rgb(200, 200, 200);
+	padding: 1px;
+}
+
+.search_header {
+
+	position: relative;
+	width: 100%;
+}
+
+.search_header2 {
+
+	position: absolute;
+	right: 0px;
+	font-size: xx-small;
+}
+
+.search_header3 {
+
+	text-align: right;
+	font-size: xx-small;
+}
+
+.search_result {
+
+	width: 90%;
+	margin: auto;
+	background-color: rgb(250, 250, 250);
+	border: 1px solid rgb(200, 200, 200);
+	padding: 3px;
+}
+
+.search_title {
+
+	font-size: large;
+	font-weight: bold;
+	position: relative;
+	width: 100%;
+}
+
+.search_title2 {
+
+	position: absolute;
+	right: 0px;
+	font-weight: normal;
+	text-align: right;
+	font-size: xx-small;
+}
+
+
+/* Some modifications for the quick search box */
+.search_menu {
+
+	position: absolute; 
+	right: 3px; 
+	top: 0px;
+	width: auto;
+}
+
+.search_menu input {
+
+	position: relative;
+	top: 3px;
+	background: rgb(248, 248, 248);	
+	height: 15px;
+	width: 130px;
+	padding: 0px;
+	
+}
+
+/* login screen */
+.login {
+
+	width: 50%;
+	margin: auto;
+}
+
+
+/* Navigation trace path */
+#navitrace {
+
+	position: relative;
+	top: -6px;
+	left: 0px;
+	right: 0px;
+	margin: auto;
+	border-bottom: 1px dotted rgb(140, 140, 140);
+	font-size: x-small;
+}
+
+/* Error messages and notices */
+.notice {
+
+	color: rgb(240, 30, 30);
+	font-style: italic;
+	text-align: center;
+}
+
+.notice input {
+
+	background-color: rgb(250, 180, 180);
+}
+
+.notice select {
+
+	background-color: rgb(250, 180, 180);
+}
+
+.notice textarea {
+
+	background-color: rgb(250, 180, 180);
+}
+
+
+/* Category listing */
+.category_listing {
+	
+	width: 80%;
+	margin:auto;
+}
+
+.category_descr {
+	
+	font-size: x-small;
+	font-style: italic; 
+}
+
+.category_header {
+
+	position: relative;
+	width: 80%;
+	margin: auto;
+	border-bottom: 1px solid rgb(200, 200, 200);
+	font-size: xx-small;
+	padding-left: 5px;
+}
+
+.category_header2 {
+
+	position: absolute;
+	right: 5px;
+}
+
+.category_header select {
+
+	font-size: xx-small;
+	height: 14px;
+}
+
+.category_header input {
+
+	font-size: xx-small;
+	height: 14px;
+}
+
+/* Dialog styles */
+
+.dialog_back {
+
+	position: relative; 
+	left: 15px; 
+	text-align: left; 
+	width: 95%;
+	padding: 5px;
+	border: 1px solid rgb(225, 225, 225);
+	background-color: rgb(253, 253, 253);
+
+}
+
+.dialog_top {
+
+	position: relative;
+	top: 1px;
+	width: 30%;
+	border-bottom: 0px;
+	z-index: 2;
+}
+
+/* Entry view layout */
+
+.entry {
+
+	width: 85%;
+	margin: auto;
+	border: 2px dotted rgb(200, 200, 200);
+	background-color: rgb(253, 253, 253);
+}
+
+.entry_header {
+
+	width: 80%;
+	margin: auto;
+	border-bottom: 1px solid rgb(180, 180, 180);
+	font-size: large;
+	font-variant: small-caps;
+	font-weight: bold;
+}
+
+.entry_subheader {
+
+	width: 80%;
+	margin: auto;
+	font-size: xx-small;
+}
+
+.entry_content {
+
+	width: 95%;
+	margin: auto;
+}
