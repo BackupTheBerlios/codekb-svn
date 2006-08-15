@@ -1,0 +1,120 @@
+codeKB - the source code knowledge base
+Copyright (C) 2006  Alexander Thiem
+
+This program is free software; you can redistribute it and/or modify it under
+ the terms of the GNU General Public License as published by the Free 
+ Software Foundation; either version 2 of the License, or (at your option) 
+ any later version. 
+
+This program is distributed in the hope that it will be useful, but WITHOUT 
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ details. 
+
+You should have received a copy of the GNU General Public License along with 
+this program; if not, write to the Free Software Foundation, Inc., 51 
+Franklin St, Fifth Floor, Boston, MA 02110, USA
+-----------------------------------------------------------------------------
+
+
+You will find installation instructions in the INSTALL file.
+
+
+- About codeKB
+- Development
+- TODO
+- Bugs
+- Thanks
+- Contact
+
+
+About codeKB
+------------
+
+What is it?
+codeKB stands for 'source code knowledge base'. It was designed to keep all 
+your patches, scripts, code snippets, short liners and algorithms together in
+one place where you can find them easily.
+Ever wanted to patch that new version of a package with the patch you wrote a
+month ago - it is gone for sure ;)
+Put them all in here and you can organize your code knowledge.
+
+What is it not?
+codeKB is not a tool like svn or cvs. It is not designed to keep whole 
+projects or many code files that belong together. It don't has a revisioning 
+system or anything like that. It's only for algorithms, patches and snippets. 
+Go and use svn instead.
+
+How does it work?
+codeKB is a easy to use web application based on php. All of its content is 
+stored in entries which can contain documentation of your source code and of 
+course the code itself.
+Entries are organized in categories to store them semantically. Because one 
+code often suits to several categories entries can linked in different 
+categories.
+codeKB has a simple user management system with users and groups to define 
+fine grained access rights for users on categories and the entries in there.
+
+
+Development
+-----------
+
+codeKB was developed because there was a need for it.
+This need is first of all a personal need and if this need is satisfied with
+the current version of codeKB further work on the project will be done 
+rarely.
+If there are people out there that wish to really use codeKB for their own
+stuff I'm willing to put more work into it trying to get more features and 
+fewer bugs.
+But I cannot garanty support for anything related to codeKB. I will help
+when I'm able to.
+Any contributions like language files or better looking layout templates are
+more than welcome.
+
+
+TODO
+----
+
+A quite incomplete todo list of things I remember I wanted to add to codeKB.
+
+- making everything more userfriendly
+- current fulltext search is still not what I wanted
+- more bbcodes
+- writing entries is more than uncomfortable. JavaScript or even AJAX??
+- making everything faster. With lots of stuff in the db it could be slow
+- more options for users - bookmarks and stuff?
+
+
+Bugs
+----
+
+codeKB was tested only by me the developer - so there _will_ be lots of bugs, 
+I'm sure.
+However there _should_ be no crucial bugs that will kill your whole system.
+But don't rely on codeKB as your only place to store your work until it was
+tested by more than one user.
+Please reportany misbehaviour you see - together with what excatly you've 
+done and a backtrace if possible (debug = true).
+
+
+Thanks
+------
+
+Because I'm using two external php classes in codeKB I want to thank these 
+two projects: 
+BBCode Parser
+http://www.christian-seiler.de/projekte/php/bbcode/index.html
+GeSHi - Generic Syntax Highlighter
+http://qbnz.com/highlighter/
+
+
+Contact
+-------
+
+Project site: http://thiem-net.de/codeKB/
+berliOS: http://codekb.berlios.de
+EMail: codekb@thiem-net.de
+Jabber: alex@thiem-net.de
+
+
+EOF
