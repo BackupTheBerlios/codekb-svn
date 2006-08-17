@@ -323,7 +323,8 @@
 
 				$lastentry = $id;
 				$array = $db->all();
-				$lastcat = $array; 
+				$lastcat = $array;
+				 
 			}
 	
 			$succ = false;						
@@ -334,7 +335,7 @@
 					break;
 				}
 			}
-	
+
 			if ($succ)
 				return true;
 		

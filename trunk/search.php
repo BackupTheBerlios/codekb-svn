@@ -5,8 +5,12 @@
 	$user = null;	
 	$site = null;
 
-	$user = new CodeKBUser();
-	$site = new CodeKBSite($user);
+	try {
+		$user = new CodeKBUser();
+		$site = new CodeKBSite($user);
+	} catch (Exception $e) {
+		CodeKBException::backtrace();
+	}
 
 	$site->registerfunction("extended", "showextended", true);
 	$site->registerfunction("search", "showsearch");
@@ -116,8 +120,8 @@
 		} 
 	
 		$start_search = microtime(true);
-		$searchquery = buildsearchquery();
 		$db = new CodeKBDatabase();
+		$searchquery = buildsearchquery($db->type());
 		try {
 			$db->dosql($searchquery);
 		} catch (Exception $e) {
@@ -168,7 +172,7 @@
 
 	} // showsearch
 
-	function buildsearchquery() {
+	function buildsearchquery($type) {
 	
 		global $lang;
 	
@@ -184,30 +188,34 @@
 		$keywords = preg_split ("/\s+/",trim($_POST['query']));
 		$count = count($keywords);
 		
-		for ($i = 0; $i < $count; $i++)
-			$query .= "entries_fti i".$i.", ";	
+		if ($type == "pgsql")
+			for ($i = 0; $i < $count; $i++)
+				$query .= "entries_fti i".$i.", ";	
 	
 		if (is_array($_POST['cats']))
 			$query .= " entry_cat, ";
 
-		$query .= "entries WHERE entries.oid = i0.id ";
+		$query .= "entries WHERE "; 
+		
+		if ($type == "pgsql")
+			$query .= "entries.oid = i0.id AND ";
 	
 		if ($_POST['author'])
-			$query .= "AND lower(entries.author) = lower('".CodeKBDatabase::string($_POST['author'])."') ";
+			$query .= "lower(entries.author) = lower('".CodeKBDatabase::string($_POST['author'])."') AND ";
 		
 		$a = 1;
 		$b = count($_POST['cats']);
 
 		while (is_array($_POST['cats']) && !is_null($val = array_shift($_POST['cats']))) {
 			if ($a == 1)
-				$query .= "AND entries.id = entry_cat.entry AND ( ";
+				$query .= "entries.id = entry_cat.entry AND ( ";
 		
 			$query .= "entry_cat.cat = ".CodeKBDatabase::number($val)." ";
 		
 			if ($a != $b)
 				$query .= "OR ";
 			else
-				$query .= ") ";
+				$query .= ") AND ";
 			
 			$a++;
 	
@@ -235,20 +243,35 @@
 				default: $age = time();																			
 			}
 		
-			$query .= "AND entries.".CodeKBDatabase::string($wage)." > '".CodeKBDatabase::string(date("Y-m-d H:i:s", time() - $age))."' "; 	 
+			$query .= "entries.".CodeKBDatabase::string($wage)." > '".CodeKBDatabase::string(date("Y-m-d H:i:s", time() - $age))."' AND "; 	 
 		
 		}
 	
 		$i = 0;
+		
+		if ($type == "mysql")
+			$query .= "(";
+					
 		while (is_array($keywords) && !is_null($val = array_shift($keywords))) {
 			if ($val == "*" || $val == "?")
 				$val = "";
-			$query .= "AND i".$i.".string ~ lower('^".CodeKBDatabase::string($val)."') ";
-			if ($i > 0)
-				$query .= "AND i".($i-1).".id = i".$i.".id ";
-			$i++;
+
+			if ($type == "pgsql") {
+				$query .= ($i==0?"":"AND ")."i".$i.".string ~ lower('^".CodeKBDatabase::string($val)."') ";
+				if ($i > 0)
+					$query .= "AND i".($i-1).".id = i".$i.".id ";
+				$i++;
+			}
+			
+			if ($type == "mysql")
+				$query .= ($i==0?"":"OR ")." entries.description LIKE '%".CodeKBDatabase::string($val)."%' OR entries.documentation LIKE '%".CodeKBDatabase::string($val)."%' ";
+				
+			$i++;	
 		
 		}
+		
+		if ($type == "mysql")
+			$query .= ") ";
 	
 		$sortorder = false;
 		switch ($_POST['sort']) {
@@ -267,7 +290,7 @@
 		}
 	
 		$query .= "ORDER BY ".$sort." ".$order;
-	
+	echo $query;
 		return $query;
 		
 	} // buildsearchquery

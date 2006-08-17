@@ -41,7 +41,7 @@
 
 			if ($this->_user->entrycan("download", $this->_entry))
 				$this->_downloadable = true;
-				
+		
 			$this->_name = $db->column("name");
 			$this->_fsname = $db->column("fs_name");
 			$this->_size = $db->column("size");

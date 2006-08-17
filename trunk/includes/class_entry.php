@@ -44,6 +44,10 @@
 			$this->_symbol = $db->column("symbol");
 			$this->_created = $db->column("created");
 			$this->_modified = $db->column("modified");
+			
+			// For mysql...
+			if ($this->_modified == "0000-00-00 00:00:00")
+				$this->_modified = null;
 		
 		} // construct
 		
@@ -209,7 +213,7 @@
   							   "symbol, ".
 							   "highlight ".
 						   		"FROM files ".
-								 	"WHERE entry = {$db->number($this->_id)}" .
+								 	"WHERE entry = {$db->number($this->_id)} " .
 							 		"ORDER BY ".($sort?$db->string($sort):"name"));
 			return $db->all(); 
 	

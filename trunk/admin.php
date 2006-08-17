@@ -8,8 +8,12 @@ require_once("includes/global.php");
 	$group = null;
 	$userid = null;
 
-	$user = new CodeKBUser();
-	$site = new CodeKBSite($user);
+	try {
+		$user = new CodeKBUser();
+		$site = new CodeKBSite($user);
+	} catch (Exception $e) {
+		CodeKBException::backtrace();
+	}
 
 	$site->registermain("main");
 	$site->registerfunction("menu", "showmenu", true);

@@ -6,8 +6,12 @@
 	$user = null;	
 	$site = null;
 
-	$user = new CodeKBUser();
-	$site = new CodeKBSite($user);
+	try {
+		$user = new CodeKBUser();
+		$site = new CodeKBSite($user);
+	} catch (Exception $e) {
+		CodeKBException::backtrace();
+	}
 
 	$site->registerfunction("show", "showhelp", true);
 

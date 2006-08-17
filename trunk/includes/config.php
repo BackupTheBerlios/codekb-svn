@@ -10,6 +10,7 @@ $conf['general']['title'] = "codeKB - Source Code Knowledge Base";					// browse
 $conf['general']['stylesheet'] = "codekb.css";										// relative stylesheet path 
 
 // database settings
+$conf['db']['type'] = "pgsql";								// pgsql or mysql
 $conf['db']['host'] = "";
 $conf['db']['port'] = "";
 $conf['db']['name'] = "";

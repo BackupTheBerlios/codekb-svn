@@ -23,6 +23,9 @@
 			
 			CodeKBException::$_error[] = $this->__toString();
 			
+			
+//			die();
+			
 		} // construct
 		
 		public function __toString() {
