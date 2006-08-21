@@ -47,8 +47,8 @@
 		
 		$form->addcheckbox("cookie", $lang['login']['cookie']);
 		
-		$form->addsubmit();
-		$form->addcancel();
+		$form->addbutton("submit");
+		$form->addbutton("cancel");
 		
 		if ($_POST['submit']) {
 			if (!$form->fill())
@@ -134,8 +134,8 @@
 		$form->addlabel("password2", $lang['register']['passwordagain']);
 		$form->setrequired("password2");
 		
-		$form->addsubmit();
-		$form->addcancel();
+		$form->addbutton("submit");
+		$form->addbutton("cancel");
 		
 		if ($_POST['submit']) {
 			if (!$form->fill())

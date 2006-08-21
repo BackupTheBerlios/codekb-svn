@@ -5,22 +5,16 @@
 		
 		private $_target = "";
 		
+		private $_action = "";
+		
 		private $_fields = array();
-		
-		private $_submit = false;
-		private $_submit_text = false;
-		
-		private $_cancel = false;
-		private $_cancel_text = false;
-		
-		private $_preview = false;
-		private $_preview_text = false;
 		
 		private $_multipart = false; 
 		
 		public function __construct($target, $action) {
 			
 			$this->_target = $target;
+			$this->_action = $action;
 			$this->addhidden("action", $action);
 			
 		} // construct
@@ -73,6 +67,7 @@
 											}
 											break;
 						case "file":
+						case "button":
 						case "hidden":		break;
 						default:			$this->_fields[$id]['_value_'] = stripslashes($_POST[$id]);
 						
@@ -186,57 +181,20 @@
 		
 		} // addmultiselect
 		
-
-		// TODO: array for buttons!
-		
-		public function addsubmit($id = null, $text = null) {
+		public function addbutton($id, $text = null) {
 			
 			global $lang;
 			
-			if ($id)
-				$this->_submit = $id;
-			else
-				$this->_submit = "submit";
+			if ($id == "submit" && !$text)
+				$text = $lang['general']['submit'];
+			if ($id == "cancel" && !$text)
+				$text = $lang['general']['cancel'];
+			
+			$this->_fields[$id]['_type_'] = "button";
+			$this->_fields[$id]['_text_'] = $text;				
+			
+		} // addbutton
 
-			if ($text)
-				$this->_submit_text = $text;
-			else
-				$this->_submit_text = $lang['general']['submit'];
-			
-		} // addsubmit
-
-		public function addcancel($id = null, $text = null) {
-			
-			global $lang;
-			
-			if ($id)
-				$this->_cancel = $id;
-			else
-				$this->_cancel = "cancel";
-
-			if ($text)
-				$this->_cancel_text = $text;
-			else
-				$this->_cancel_text = $lang['general']['cancel'];
-			
-		} // addcancel
-		
-		public function addpreview($id = null, $text = null) {
-			
-			global $lang;
-			
-			if ($id)
-				$this->_preview = $id;
-			else
-				$this->_preview = "preview";
-
-			if ($text)
-				$this->_preview_text = $text;
-			else
-				$this->_preview_text = $lang['general']['preview'];
-			
-		} // addpreview
-	
 		public function remove($id, $subid = null) {
 			
 			if ($subid)
@@ -253,8 +211,12 @@
 			if ($this->_fields[$id]['_missing_'])
 				$out .= "\t<span class=\"notice\">\n";
 			
-			if ($this->_fields[$id]['_label_'])
-				$out .= "\t<label for = \"".htmlentities($id)."\">".$this->_fields[$id]['_label_']."</label>\n";
+			if ($this->_fields[$id]['_label_']) {
+				$out .= "\t<label for = \"".htmlentities($id)."\">".$this->_fields[$id]['_label_'];
+				if ($this->_fields[$id]['_required_'])
+					$out .= "*";	
+				$out .= "</label>\n";
+			}
 			
 			switch ($this->_fields[$id]['_type_']) {
 				
@@ -306,11 +268,20 @@
 									break;
 				case "file": 		$out .= "\t<input type = \"file\" name = \"".htmlentities($id)."\" class = \"file\">\n";
 									break;
+				case "button":		$out .= "\t<input type = \"submit\" name = \"".htmlentities($id)."\" ";
+									if ($this->_fields[$id]['_text_'])
+										$out .= "value = \"".htmlentities($this->_fields[$id]['_text_'])."\" ";
+									$out .= "class = \"button\">\n";
+									break;
+				case "hidden":		$out .= "\t<input type = \"hidden\" name = \"".htmlentities($id)."\" value = \"".htmlentities($this->_fields[$id]['_value_'])."\">\n";
+									break;
 
 			}
 			
 			if ($this->_fields[$id]['_missing_'])
 				$out .= "\t</span>\n";
+				
+			unset($this->_fields[$id]);
 			
 			return $out;
 			
@@ -325,11 +296,12 @@
 				unset($this->_fields[$id]);
 			}
 			else {
-				foreach ($this->_fields as $val) {
-					$code = $this->output(key($this->_fields));
-					$out .= $code.($code?"<br /><br />":"");
-					next($this->_fields);
-				}
+				foreach ($this->_fields as $val)
+					if ($val['_type_'] != "button") {
+                    	$code = $this->output(key($this->_fields));
+                        $out .= $code.($code?"<br /><br />":"");
+                    } else
+                    	next($this->_fields);
 			}
 				
 			return $out;
@@ -338,15 +310,16 @@
 		
 		public function head() {
 			
-			$out = "\n<form action = \"".htmlentities($this->_target)."\" method = \"POST\" ";
+			$out = "\n<form action = \"".htmlentities($this->_target)."?action=".htmlentities($this->_action)."\" method = \"POST\" ";
 			if ($this->_multipart)
 				$out .= "enctype = \"multipart/form-data\"";			
 			$out .= ">\n\n";
 			
 			foreach ($this->_fields as $val) {
 				if ($val['_type_'] == "hidden")
-					$out .= "\t<input type = \"hidden\" name = \"".htmlentities(key($this->_fields))."\" value = \"".htmlentities($val['_value_'])."\">\n";
-				next($this->_fields);
+					$out .= $this->output(key($this->_fields));
+				else
+					next($this->_fields);
 			}	
 							
 			return $out;		
@@ -356,13 +329,12 @@
 		public function tail() {
 			
 			$out = "";
-			
-			if ($this->_submit)
-				$out .= "\t<input type = \"submit\" name = \"".htmlentities($this->_submit)."\" value = \"".htmlentities($this->_submit_text)."\" class = \"button\">\n"; 
-			if ($this->_preview)
-				$out .= "\t<input type = \"submit\" name = \"".htmlentities($this->_preview)."\" value = \"".htmlentities($this->_preview_text)."\" class = \"button\">\n";
-			if ($this->_cancel)
-				$out .= "\t<input type = \"submit\" name = \"".htmlentities($this->_cancel)."\" value = \"".htmlentities($this->_cancel_text)."\" class = \"button\">\n"; 
+			foreach ($this->_fields as $val)
+				if ($val['_type_'] == "button") {
+					$code = $this->output(key($this->_fields));
+					$out .= $code."";
+				}  else
+                    	next($this->_fields);
 
 			$out .= "\n</form>\n";
 			

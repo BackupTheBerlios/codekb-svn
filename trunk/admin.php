@@ -112,8 +112,8 @@ require_once("includes/global.php");
 		
 		$form1->addlabel("clone", $lang['admin']['clonefrom']);
 
-		$form1->addsubmit("addgroup");
-		$form1->addcancel();
+		$form1->addbutton("addgroup", $lang['general']['submit']);
+		$form1->addbutton("cancel");
 
 		$form2 = new CodeKBForm("admin.php", "groups");
 		
@@ -121,8 +121,8 @@ require_once("includes/global.php");
 			if (!is_null($val['name']))
 				$form2->addcheckbox("group_".$val['id'], $val['name']." (".url("admin.php?group=".$val['id']."&action=modifygroup",$lang['general']['modify']).")");
 		
-		$form2->addsubmit("removegroup", $lang['general']['delete']);
-		$form2->addcancel();
+		$form2->addbutton("removegroup", $lang['general']['delete']);
+		$form2->addbutton("cancel");
 		
 		if ($_POST['addgroup']) {
 			
@@ -220,8 +220,8 @@ require_once("includes/global.php");
 			$form1->addlabel("name", $lang['admin']['groupname']);
 			$form1->setrequired("name");
 		
-			$form1->addsubmit("changename");
-			$form1->addcancel();	
+			$form1->addbutton("changename", $lang['general']['submit']);
+			$form1->addbutton("cancel");	
 
 			$form2 = new CodeKBForm("admin.php", "modifygroup");
 			$form2->addhidden("group", $group);
@@ -232,8 +232,8 @@ require_once("includes/global.php");
 				if (!is_null($val['name']))
 					$form2->addcheckbox("user_".$val['id'], $val['name']." (".url("admin.php?user=".$val['id']."&action=modifyuser",$lang['general']['modify']).")");
 		
-			$form2->addsubmit("removeuser", $lang['general']['delete']);
-			$form2->addcancel();
+			$form2->addbutton("removeuser", $lang['general']['delete']);
+			$form2->addbutton("cancel");
 		
 			$form3 = new CodeKBForm("admin.php", "modifygroup");
 			$form3->addhidden("group", $group);
@@ -244,8 +244,8 @@ require_once("includes/global.php");
 				if (!is_null($val['name']))
 					$form3->addcombo("user", $val['id'], $val['name']);
 		
-			$form3->addsubmit("adduser");
-			$form3->addcancel();
+			$form3->addbutton("adduser", $lang['general']['submit']);
+			$form3->addbutton("cancel");
 		}
 
 		$form4 = new CodeKBForm("admin.php", "modifygroup");
@@ -257,8 +257,8 @@ require_once("includes/global.php");
 		foreach ($categories as $val) 
 			$form4->addcombo("cat", $val['id'], str_repeat("-", ($val['reclevel']) *2)." ".$val['name']);  
 
-		$form4->addsubmit("choosecat");
-		$form4->addcancel();
+		$form4->addbutton("choosecat", $lang['general']['submit']);
+		$form4->addbutton("cancel");
 		
 		if ($_POST['choosecat'] && $form4->fill()) {
 		
@@ -312,8 +312,8 @@ require_once("includes/global.php");
 			$form5->addcheckbox("cadd_".$_POST['cat'], null, $rights["cadd"]);
 			$form5->addcheckbox("cdel_".$_POST['cat'], null, $rights["cdel"]);
 			
-			$form5->addsubmit("changerights");
-			$form5->addcancel();
+			$form5->addbutton("changerights", $lang['general']['submit']);
+			$form5->addbutton("cancdl");
 		}
 
 		if ($_POST['changename']) {
@@ -594,8 +594,8 @@ require_once("includes/global.php");
 		
 		$form1->addcheckbox("delete", $lang['admin']['deleteuser']);
 		
-		$form1->addsubmit("changeuser");
-		$form1->addcancel();
+		$form1->addbutton("changeuser", $lang['general']['submit']);
+		$form1->addbutton("cancel");
 		
 		$form2 = new CodeKBForm("admin.php", "modifyuser");
 		$form2->addhidden("user", $userid);
@@ -606,8 +606,8 @@ require_once("includes/global.php");
 			if (!is_null($val['name']))
 				$form2->addcombo("group", $val['id'], $val['name']);
 		
-		$form2->addsubmit("joingroup");
-		$form2->addcancel();		
+		$form2->addbutton("joingroup", $lang['general']['submit']);
+		$form2->addbutton("cancel");		
 
 		$form3 = new CodeKBForm("admin.php", "modifyuser");
 		$form3->addhidden("user", $userid);
@@ -618,8 +618,8 @@ require_once("includes/global.php");
 			if (!is_null($val['name']))
 				$form3->addcheckbox("group_".$val['id'], $val['name']." (".url("admin.php?group=".$val['id']."&action=modifygroup",$lang['general']['modify']).")");
 		
-		$form3->addsubmit("partgroup", $lang['general']['delete']);
-		$form3->addcancel();
+		$form3->addbutton("partgroup", $lang['general']['delete']);
+		$form3->addbutton("cancel");
 		
 		
 		if ($_POST['changeuser']) {

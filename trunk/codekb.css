@@ -152,6 +152,10 @@ a:hover {
 }
 
 /* Definitions for forms */
+form {
+	display: inline;
+}
+
 .forms {
 
 	width: 70%;
@@ -328,8 +332,8 @@ a:hover {
 }
 
 
-/* Some modifications for the quick search box */
-.search_menu {
+/* Some modifications for the quick search box and the bottom navigation */
+.form_menu {
 
 	position: absolute; 
 	right: 3px; 
@@ -337,14 +341,15 @@ a:hover {
 	width: auto;
 }
 
-.search_menu input {
+.form_menu input, .form_menu select, .form_menu button {
 
 	position: relative;
-	top: 3px;
+	top: 2px;
 	background: rgb(248, 248, 248);	
 	height: 15px;
 	width: 130px;
 	padding: 0px;
+	font-size: 10px;
 	
 }
 

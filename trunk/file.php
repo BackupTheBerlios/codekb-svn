@@ -123,7 +123,8 @@
 		$size = $file->size();
 		if ( $size > 1024 ) { $size /= 1024; $unit = "kb"; }
 		if ( $size > 1024 ) { $size /= 1024; $unit = "mb"; }
-		$content .= round($size).$unit.")";
+		$content .= round($size).$unit.") | ";
+		$content .= url("entry.php?id=".$file->entry()->id()."&cat=".$cat, phrasereplace($lang['general']['backto'], "%1%", "entry"));
 		$entrytpl->push("subheader", $content);
 	
 		$code = "[code=".$file->highlight()."]";
@@ -175,7 +176,7 @@
 		$form->addlabel("upload", $lang['file']['upload']);
 		
 		$form->addcombo("highlight", $conf['highlight']['binary'], null, $conf['highlight']['binary']==$file->highlight());
-		while ($language = next($conf['highlight']['languages']))
+		foreach ($conf['highlight']['languages'] as $language)
 			$form->addcombo("highlight", $language, null, $language==$file->highlight());
 		 		
 		$form->addlabel("highlight", $lang['file']['language']);
@@ -187,8 +188,8 @@
 		while ($val = $db->row())
 			$form->addradio("symbol", $val['name'], icon($val['name'], $val['name']), $val['name']==$file->symbol(), false); 
 
-		$form->addsubmit();
-		$form->addcancel();		
+		$form->addbutton("submit");
+		$form->addbutton("cancel");		
 
 		if ($_POST['submit']) {
 			if (!$form->fill()) 

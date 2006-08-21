@@ -8,9 +8,9 @@
 		$ckb[footer]
 		$ckb[runtime]
 
-		<span style = "position: absolute; right: 7px;">
+		<span class = "forms form_menu" style = "position: absolute; right: 7px;">
 
-			<a href = "http://thiem-net.de" target = "_blank">Thiem-net.de</a>
+			$ckb[navigation]
 
 		</span>
 

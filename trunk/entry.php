@@ -81,7 +81,7 @@
 		$site->title($entry->name());
 	
 		if ($user->entrycan("changeentry", $entry)) {
-			$site->addmenu("entry.php?id=".$entry->id()."&cat=".$cat."&action=change", $lang['menu']['modifyentry'], $lang['menu']['modifyentrysalt']);
+			$site->addmenu("entry.php?id=".$entry->id()."&cat=".$cat."&action=change", $lang['menu']['modifyentry'], $lang['menu']['modifyentryalt']);
 			$site->addfooter("entry.php?id=".$entry->id()."&cat=".$cat."&action=modify", "configure", $lang['menu']['configureentry'], $lang['menu']['configureentryalt']);
 			$site->addfooter("entry.php?id=".$entry->id()."&cat=".$cat."&action=files", "files", $lang['menu']['attach'], $lang['menu']['attachalt']);
 		} 
@@ -215,9 +215,9 @@
 		$form->addtextarea("documentation", ($change?$entry->documentation():""));
 		$form->addlabel("documentation", $lang['entry']['documentation']." (".url("help.php?on=bbcode", $lang['entry']['bbcode'], null, true).")");
 		
-		$form->addsubmit();
-		$form->addpreview();
-		$form->addcancel();
+		$form->addbutton("submit");
+		$form->addbutton("preview", $lang['general']['preview']);
+		$form->addbutton("cancel");
 		
 		if ($_POST['submit'] || $_POST['preview']) {
 			$fill = $form->fill();
@@ -378,8 +378,8 @@
 
 			$form1->addlabel("newcat", $lang['entry']['linkadd']);				
 			
-			$form1->addsubmit("addlink");
-			$form1->addcancel();
+			$form1->addbutton("addlink", $lang['general']['submit']);
+			$form1->addbutton("cancel");
 		}
 		
 		if ($user->entrycan("delentry", $entry)) { 
@@ -391,12 +391,12 @@
 			$catsofentry = $entry->categories();
 			foreach ($catsofentry as $val) {
 				$thiscat = new CodeKBCategory($val, $user);
-				$form2->addcheckbox("cat_".$thiscat->id(), $thiscat->name());
+				$form2->addcheckbox("cat_".$thiscat->id(), url("category.php?id=".$thiscat->id(), $thiscat->name()));
 				unset($thiscat);  
 			}	
 
-			$form2->addsubmit("unlink", $lang['general']['delete']);
-			$form2->addcancel();
+			$form2->addbutton("unlink", $lang['general']['delete']);
+			$form2->addbutton("cancel");
 		}
 		
     	if ($_POST['addlink'] && $form1->fill()) {
@@ -405,7 +405,7 @@
 				if ($entry->addlink($form1->value("newcat"))) {
 					$site->addcontent(notice(phrasereplace($lang['entry']['linkaddsucc'], "%1%", $newcat->name())));
 					if ($form2)
-						$form2->addcheckbox("cat_".$newcat->id(), $newcat->name());
+						$form2->addcheckbox("cat_".$newcat->id(), url("category.php?id=".$newcat->id(), $newcat->name()));
 				} else
 					$site->addcontent(notice($lang['entry']['failedchange']));
 				unset ($newcat);
@@ -530,7 +530,7 @@
 		$form1->addlabel("upload", $lang['file']['upload']);
 		
 		$form1->addcombo("highlight", $conf['highlight']['binary']);
-		while ($language = next($conf['highlight']['languages']))
+		foreach ($conf['highlight']['languages'] as $language)
 			$form1->addcombo("highlight", $language, null, $language=="text");
 		 		
 		$form1->addlabel("highlight", $lang['file']['language']);
@@ -542,8 +542,8 @@
 		while ($val = $db->row())
 			$form1->addradio("symbol", $val['name'], icon($val['name'], $val['name']), $val['name']=="Unkown", false); 
 		
-		$form1->addsubmit("addfile");
-		$form1->addcancel();
+		$form1->addbutton("addfile", $lang['general']['submit']);
+		$form1->addbutton("cancel");
 	
 		$form2 = new CodeKBForm("entry.php", "files");
 		$form2->addhidden("id", $entry->id());
@@ -552,10 +552,10 @@
 		$filesofentry = $entry->listfiles();
 		
 		foreach ($filesofentry as $val)
-			$form2->addcheckbox("file_".$val['id'], icon($val['symbol'], $val['name'])." ".$val['name']." (".url("file.php?id=".$val['id']."&cat=".$cat."&action=modify",$lang['general']['modify']).")");  
+			$form2->addcheckbox("file_".$val['id'], icon($val['symbol'], $val['name'])." ".url("file.php?id=".$val['id']."&cat=".$cat, $val['name'])." (".url("file.php?id=".$val['id']."&cat=".$cat."&action=modify",$lang['general']['modify']).")");  
 
-		$form2->addsubmit("removefile", $lang['general']['delete']);
-		$form2->addcancel();
+		$form2->addbutton("removefile", $lang['general']['delete']);
+		$form2->addbutton("cancel");
 		
     
 	    if ($_POST['addfile'] && $form1->fill()) {
@@ -564,7 +564,7 @@
 				$newfile = new CodeKBFile($ret, $user);
 				$site->addcontent(notice($lang['file']['addsucc']));
 				
-				$form2->addcheckbox("file_".$newfile->id(), icon($newfile->symbol(), $newfile->name())." ".$newfile->name()." (".url("file.php?id=".$newfile->id()."&cat=".$cat."&action=modify",$lang['general']['modify']).")");
+				$form2->addcheckbox("file_".$newfile->id(), icon($newfile->symbol(), $newfile->name())." ".url("file.php?id=".$newfile->id()."&cat=".$cat, $newfile->name())." (".url("file.php?id=".$newfile->id()."&cat=".$cat."&action=modify",$lang['general']['modify']).")");
 				unset ($newfile);
 			} catch (Exception $e) {
 				if ($e->getCode() == 1) {

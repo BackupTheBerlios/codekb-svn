@@ -2,7 +2,7 @@
 
 $ckb[menu]
 
-	<span class="forms search_menu">
+	<span class="forms form_menu">
 
 	$ckb[search]
 

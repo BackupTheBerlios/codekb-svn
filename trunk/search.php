@@ -67,8 +67,8 @@
 		$form->addradio("whichage", $lang['sort']['sortbycreatedate'], $lang['sort']['sortbycreatedate'], true);
 		$form->addradio("whichage", $lang['sort']['sortbymodifydate'], $lang['sort']['sortbymodifydate']);
 
-		$form->addsubmit(null, $lang['search']['search']);
-		$form->addcancel();
+		$form->addbutton(null, $lang['search']['search']);
+		$form->addbutton("cancel");
 		
 		$dialog = new CodeKBTemplate("dialog");
 		
@@ -112,7 +112,10 @@
 
 		$site->title($lang['search']['results']);
 		
-		$site->addfooter("search.php", "search", $lang['search']['extended']); 
+		$site->addfooter("search.php", "search", $lang['search']['extended']);
+		
+		if ($_POST['cancel'])
+    		redirect("category.php");
 	
 		if (!$_POST['query'] && !$_POST['author'] && !$_POST['cats']) {
 			$site->addcontent(notice($lang['search']['noquery']));

@@ -330,8 +330,8 @@
 		$form->addcombo("epp", $lang['search']['all'], null, $entriesperpage==$lang['search']['all']);
 		$form->addlabel("epp", $lang['search']['entriesperpage']);				
 		
-		$form->addsubmit();
-		$form->addcancel();
+		$form->addbutton("submit");
+		$form->addbutton("cancel");
 		
 		$dialogitem->push("head", $form->head());
 		$content = $form->get("sort");
@@ -445,8 +445,8 @@
 			$form->addlabel("parent", $lang['category']['parent']);
 		}
 
-		$form->addsubmit();
-		$form->addcancel();
+		$form->addbutton("submit");
+		$form->addbutton("cancel");
 		
 		if ($_POST['submit']) {
 			
@@ -537,8 +537,8 @@
 
 		$form = new CodeKBForm("category.php", "delete");
 		$form->addhidden("id", $category->id());
-		$form->addsubmit();
-		$form->addcancel();
+		$form->addbutton("submit");
+		$form->addbutton("cancel");
 		
 		if ($_POST['submit']) {
 			

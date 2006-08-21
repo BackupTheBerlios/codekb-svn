@@ -236,6 +236,28 @@
 				$footeritems .= "\t\t".url($menuentry[0], icon($menuentry[1], $menuentry[2]), $menuentry[3])." \n";
 				$footeritems .= "\t\t".url($menuentry[0], $menuentry[2], $menuentry[3])."&nbsp; \n";
 			}
+			
+			if ($conf['layout']['jumptonavigation']) {
+				
+				$footerform = new CodeKBForm("category.php", "list");
+				$tmpcat = new CodeKBCategory(0, $this->_user);
+			
+				$footerform->addcombo("id", "0", $lang['category']['root']);
+			
+				$array = $tmpcat->listcategories("name", 1);
+				foreach ($array as $val) 
+					if ($this->_user->can("see", $val['id']))
+						$footerform->addcombo("id", $val['id'], str_repeat("-", ($val['reclevel']) *2)." ".$val['name']);
+				unset($tmpcat);
+				
+				$footerform->addbutton("jump", $lang['general']['go']);
+				
+				$navi = $footerform->head();
+				$navi .= $footerform->get("id");
+				$navi .= $footerform->tail();
+				
+				
+			}
 	
 			$query_num = CodeKBDatabase::querycount();
 			$endtime = microtime(true);
@@ -249,7 +271,7 @@
 			$footer = new CodeKBTemplate("footer");
 			$footer->push("footer", $footeritems);
 			$footer->push("runtime", $debug);
-			
+			$footer->push("navigation", $navi);
 			echo $footer;			
 			
 			

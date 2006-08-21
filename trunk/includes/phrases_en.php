@@ -14,6 +14,7 @@ $lang['general']['error'] = "Seems you found a bug here...";
 $lang['general']['modify'] = "Modify";
 $lang['general']['username'] = "Username";
 $lang['general']['password'] = "Password";
+$lang['general']['go'] = "Go";
 
 $lang['menu']['home'] = "Home";
 $lang['menu']['homealt'] = "Go to start page";

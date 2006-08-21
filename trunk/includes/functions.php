@@ -27,7 +27,7 @@ function bbcodehighlight ($action, $attributes, $content, $params, &$node_object
 	    return false;
 	}
 	
-	$content = stripslashes($content);
+	//$content = stripslashes($content);
 	
 	if (!isset ($attributes['default']))
 		$attributes['default'] = "text"; 
@@ -55,11 +55,17 @@ function bbcodeurl ($action, $attributes, $content, $params, &$node_object) {
 
 	if ($action == "validate")
     	return true;
-
-	if (!isset ($attributes['default']))
-		return "<a href=\"".htmlspecialchars($content)."\">".htmlspecialchars($content)."</a>";
-	else
-		return "<a href=\"".htmlspecialchars($attributes['default'])."\">".$content."</a>";
+	$target = "";
+	if (!isset ($attributes['default'])) {
+		if (stripos($content, "http") === 0)
+			$target = "target = \"_blank\"";
+		return "<a href=\"".htmlspecialchars($content)."\" {$target}>".htmlspecialchars($content)."</a>";
+	}
+	else {
+		if (stripos($attributes['default'], "http") === 0)
+			$target = "target = \"_blank\"";
+		return "<a href=\"".htmlspecialchars($attributes['default'])."\" {$target}>".$content."</a>";
+	}
 
 } // bbcodeurl
 
