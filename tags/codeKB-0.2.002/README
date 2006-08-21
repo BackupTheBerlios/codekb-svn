@@ -1,0 +1,387 @@
+codeKB - the source code knowledge base
+Copyright (C) 2006  Alexander Thiem
+
+This program is free software; you can redistribute it and/or modify it under
+ the terms of the GNU General Public License as published by the Free 
+ Software Foundation; either version 2 of the License, or (at your option) 
+ any later version. 
+
+This program is distributed in the hope that it will be useful, but WITHOUT 
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or 
+FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ details. 
+
+You should have received a copy of the GNU General Public License along with 
+this program; if not, write to the Free Software Foundation, Inc., 51 
+Franklin St, Fifth Floor, Boston, MA 02110, USA
+-----------------------------------------------------------------------------
+
+This document will cover information on what codeKB is, detailed description, 
+instructions. 
+You will find files for download on the berliOS site of codeKB at:
+
+http://developer.berlios.de/projects/codekb
+
+
+Content: 
+--------
+- What is codeKB?
+- Getting started
+- Download
+- Upgrading
+- Installation
+- Configuration
+- Layout/Theming
+- Development
+- ToDo
+- Bugs
+- Thanks
+- Contact
+
+
+
+What is codeKB?
+---------------
+
+codeKB stands for 'source code knowledge base'. It is a web based application 
+that was designed to keep all of your code snippets, short liners, shell 
+scripts and algorithms together in one place where you can find them easily and 
+fast.
+Ever wanted to patch that new version of a package with the patch you wrote a 
+month ago - it is gone for sure and you have to rewrite it.
+Put that all together in one structured database to organize your knowledge.
+You can sort things semantically, find things with fulltext search through a 
+web interface - this will be definitely more powerful than just putting all 
+your files and stuff in one folder on your hard disk. 
+
+What is it not?
+codeKB is not a tool like svn or cvs. It is not intended to keep whole projects
+or many code files that belong together. It don't has a revisioning system or 
+anything like that. It's only for algorithms, patches, scripts, snippets, etc...
+Go and use svn instead.
+
+How does it work?
+codeKB is an easy to use web application based on phpand a sql database. All of
+its content is stored in 'entries' which can contain documentation of your 
+source code and of course the code itself.
+Entries are organized in categories to store them semantically. Because one 
+code often suits to several categories entries can linked in different 
+categories similar to symlinks.
+codeKB has a simple user management system with users and groups to define fine
+grained access rights for users on categories and the entries in there.
+For example, you could setup a codeKB installation with private access just for 
+you and a public section where you share your work with others.
+Or you use codeKB with many people managed in different groups where every 
+group moderates their own section.
+
+
+Getting started
+---------------
+
+So if you like to try out codeKB you will need some things for it.
+Because codeKB uses new php class constructs you have to have at least php5 
+running on your web server.
+Sorry for that, but after switching the code to OO I didn't want to start with 
+that dumb php4 OO stuff.
+You also need a running postgresql or mysql server (it was tested on pgsql 8.x 
+and mysql 4.1).
+If you are using postgresql you will need a file called fti.so in the contrib 
+folder. If you don't have, try to get it by installing the postgresql-contrib 
+package.
+The file is needed for fulltext indexing of your entries in codeKB with pgsql.
+This should be all you need to run codeKB on your web server.
+
+Overview:
+- web server (doesn't matter which one but codeKB will use htaccess and 
+		      mod_rewrite in the future so apache will be best choice)
+- php5
+- postgresql or mysql
+- fti.so (if using pgsql)
+
+
+Download
+--------
+
+You can get the latest release of codeKB at 
+http://developer.berlios.de/projects/codekb.
+You will also find svn web access there to get the newest files of development 
+but be aware that there could be bugs that prevent codekb from running. 
+
+
+Upgrading
+---------
+
+If you already have a installation of codeKB running you have to read the 
+changelog to see if there are any special requirements/changes for the current 
+release.
+If not - you can simply replace all files with the new ones except the 
+config.php in the includes folder. This file contains your personal settings - 
+be sure to save this file.
+While codeKB is still under heavy development there could be changes in the 
+config.php which can cause your old cinfig to be invalid. This will be 
+mentioned in the changelog. Then you will have to reset your settings.
+
+
+Installation
+------------
+
+In case you downloaded a snapshot of codeKB put the tgz file in a folder that 
+is accessable through your web server and use the following command to unpack 
+its content:
+
+    tar -xvzf codekb-version.tgz
+
+where version is the version string of your file.
+
+You will find a folder called data.
+This folder will contain all files you are going to upload in codeKB. Therefore 
+this folder must be writeable for the user running your web server. If you are 
+unsure how to do this use
+
+    chmod 777 ./data
+
+to switch off all restrictions of this folder.
+To gain a bit more security this folder contains an .htaccess file for apache 
+which should prevent vistors of your site downloading the files directly.
+But to be on the safe side you should move this folder outside the www document 
+tree of your web server so that nobody can access it from outside.
+If you do so you have to change its path in the codeKB config file (more on 
+that below).
+
+To get codeKB running you need to import the sql scheme.
+If you are using postgresql you can do the following:
+
+	create a database for codeKB
+		createdb codeKB
+	connect to this database
+		psql codeKB
+	load the codeKB sql scheme
+		\i scheme_pgsql.sql
+
+This will create all tables and a trigger for the fulltext search.
+Remember that you need the file fti.so in your postgresql contrib folder.
+
+If you are using mysql do the following:
+
+	create a database for codeKB
+		mysqladmin create codeKB
+	connect to this database
+		mysql codeKB
+	load the codeKB sql scheme
+		\. scheme_mysql.sql
+
+This will create all tables. 
+
+Again for a bit more security you should create a new database user which is
+restricted to the codeKB database. This user only needs USAGE rights on the 
+tables. Here you'll find information on postgresql's user management:
+http://www.postgresql.org/docs/8.0/interactive/user-manag.html.
+At the end of the scheme_pgsql.sql file you will find two GRANT commands you 
+can use to set the needed access rights. (Instructions for mysql may follow)
+After doing this you can delete or move the scheme_*.sql outside the www 
+document tree.
+
+Now you can use codeKB by pointing your browser to the www folder you put 
+codeKB in.
+
+
+Configuration
+-------------
+
+codeKB should work with all its default settings except the database options 
+but you can change a few things to fit your needs.
+
+Configuration of codeKB is done in the config.php file in the includes folder.
+
+The settings are:
+
+['general']['basepath']: This is the path to your codeKB folder. It should be 
+						 absolute (or just a dot if you don't want absolute 
+						 paths).
+
+['general']['wwwpath']: This is the path on your web server. 
+						(http://domain.com/path/to/codekb)
+
+['general']['imagepath']: If you move the image folder you must change this 
+						  setting.
+
+['general']['language']: The name of the language file of codeKB. Currently 
+						 there is only support for english. Feel free to change
+						 the phrases.php file. If you translate the whole file 
+						 please send it to me and I will add it to the package.
+
+['general']['rewrite']: URL rewriting using apache htaccess and mod_rewrite. 
+						This feature is not implemented yet! So this setting 
+						does nothing.
+
+['general']['title']: This is the string that will appear in the browser title 
+					  bar and the codeKB site header.
+
+['general']['stylesheet']: The name of the stylesheet containg most of the 
+						   layout of codeKB.
+
+['db']['type']: 'pgsql' if using postgresql or 'mysql'.
+
+['db']['host']: The postgresql database host - if empty unix sockets will be 
+			    used.
+
+['db']['port']: The port your sql server is listening.
+
+['db']['name']: Name of the codeKB database you created.
+
+['db']['user']: The user that should run all codeKB's queries.
+
+['db']['pass']: And its password.
+
+['access']['admin']: This array contains all codeKB users that are allowed to 
+					 modify users, groups and access rights. If this array is 
+					 empty - array() - every user, even anonymous ones will be 
+					 able to do this. Use this only if you're using codeKB 
+					 locally without access from outside!
+
+['file']['path']: The path to codeKB's data folder. This should be outside the 
+				  www document tree of your web server.
+
+['highlight']['path']: codeKB is using GeSHi to highlight code listings. If you 
+					   change the path of that class you have to ajust this 
+					   setting.
+
+['highlight']['linenumbers']: If true code listings will be displayed with line 
+							  numbers. If false there will be none.
+
+['highlight']['tab']: The number of whitespaces a tabular will be displayed 
+					  with.
+
+['highlight']['languages']: This array contains all languages the highlighting 
+						    is supported for. The array should at least contain 
+						    'text' because codeKB is using this as default.
+
+['highlight']['binary']: Files marked as binary will not be displayed on screen. 
+						 Instead there is an immediate download option. Set here 
+						 the name for binary files.
+
+['bbcode']['path']: This contains the path to the bbcode parser used for 
+					documentation in codeKB.
+
+['err']['phperrors']: If you don't want php error messages appearing in codeKB 
+					  set this to false.
+
+['err']['debug']: Setting this to true will display the execution time and the 
+				  number of sql queries needed for a codeKB page in the footer 
+				  of codeKB. Additionally if there are any errors a backtrace 
+				  will be displayed.
+
+['layout']['showcounts']: This setting controls wether the category listing 
+					      will show the number of sub categories and entries 
+					      of each category. This may slow down things when 
+					      having lots of categories.
+
+['layout']['showcountsrecursive']: The above setting just shows the number of 
+								   one level below the current. Setting this 
+								   setting to true will show the total number of 
+								   sub categories and entries in the tree. This 
+								   will significantly slow down the page when 
+								   having lots of categories!
+
+['layout']['dateformat']: Set your date format here using a php format string. 
+						  (http://php.net/date)
+
+['layout']['entriesperpage']: How many entries should be displayed on one page 
+							  before splitting up into several pages.
+
+['layout']['jumptonavigation']: If true a drop down menu will appear in the 
+								codeKB footer to navigate through categories - 
+								may slow down things.
+
+['perf']['rightscache']: When having lots of categories you can set this 
+						 setting to a higher number to increase performance. 
+						 This will cache the access rights (only per page not 
+						 per session! So it does not influence security) to 
+						 reduce the number of sql queries.
+
+Layout/Theming
+--------------
+
+Code and layout are explicitly seperated in codeKB. If you want to change the 
+layout of the site you can adjust the stylesheet (per default in codekb.css) 
+or you can even change the whole html code.
+To do so go to the templates folder (includes/templates) and have a look at the 
+tpl files in there.
+You will find $ckb[name] variables as a replacement of the later content as well 
+as some <if> clauses. There is no documentation on the templates yet, but they 
+are easy to understand.
+If you have a better layout for codeKB send it in and it will be added to the 
+package. 
+
+
+Development
+-----------
+
+If somebody has suggestions for the development on codeKB or found a bug just 
+send it to me.
+codeKB was developed because there was a need for it. This need is first of all 
+a personal need and if this need is satisfied with the current version of 
+codeKB further work on the project will be done rarely. But if there are people 
+out there that wish to really use codeKB for their own stuff I'm willing to put 
+more work into it trying to get more features and fewer bugs.
+But I cannot garanty support for anything related to codeKB. I will help when 
+I'm able to.
+Any contributions like language files or better looking layout templates are 
+more than welcome. 
+
+
+ToDo
+----
+
+A quite incomplete todo list of things I remember I wanted to add to codeKB.
+- making everything more userfriendly
+- current fulltext search is still not what I wanted
+- more bbcodes
+- writing entries is more than uncomfortable. JavaScript or even AJAX??
+- making everything faster. With lots of stuff in the db it could be slow
+- more options for users - bookmarks and stuff?
+
+
+Bugs
+----
+
+codeKB was tested only by me the developer - so there will be lots of bugs, 
+I'm sure.
+However there should be no crucial bugs that will kill your whole system. 
+But don't rely on codeKB as your only place to store your work until it was 
+tested by more than one user.
+Please report any misbehaviour you see - together with what excatly you've 
+done and a backtrace if possible (debug = true).
+Bugs can be placed at the berlios bug tracker.
+
+Currently known bugs and problems:
+- the dialog template does not show up as intended in IE
+- some forms allow browser POST reload which can cause doubled entries
+- using code listings with highlight colors makes things very slow
+
+
+Thanks
+------
+
+Because I'm using two external php classes in codeKB I want to thank these two 
+projects:
+
+BBCode Parser
+http://www.christian-seiler.de/projekte/php/bbcode/index.html
+GeSHi - Generic Syntax Highlighter
+http://qbnz.com/highlighter/ 
+
+
+Contact
+-------
+
+If you have any questions you can ask me.
+If you have any bugs to report please use the berliOS bug tracker.
+
+Project site: http://thiem-net.de/codeKB/
+berliOS: http://codekb.berlios.de
+EMail: codekb@thiem-net.de
+Jabber: alex@thiem-net.de
+Bug Tracker: http://developer.berlios.de/bugs/?group_id=7075
+
+EOF
