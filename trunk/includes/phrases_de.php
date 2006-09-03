@@ -121,6 +121,12 @@ $lang['entry']['failedchange'] = "Änderung fehlgeschlagen";
 $lang['entry']['duplicate'] = "Es existiert bereits eine Kopie in der Kategorie";
 
 $lang['admin']['accessdenied'] = "Dieser Bereich ist nur für Administratoren zugänglich";
+$lang['admin']['statistics'] = "<strong>codeKB Statistik:</strong>";
+$lang['admin']['statusers'] = "<strong>%1%</strong> registrierte Benutzer";
+$lang['admin']['statgroups'] = "<strong>%1%</strong> Benutzergruppen";
+$lang['admin']['statcats'] = "<strong>%1%</strong> Kategorien";
+$lang['admin']['statentries'] = "<strong>%1%</strong> Einträge";
+$lang['admin']['statfiles'] = "<strong>%1%</strong> Anhänge mit einer Gesamtgröße von <strong>%2%</strong>";
 $lang['admin']['menu'] = "Administrations Menü";
 $lang['admin']['menuexplain'] = "Wählen Sie:";
 $lang['admin']['modifygroups'] = "Gruppen hinzufügen/löschen/ändern";
@@ -234,5 +240,32 @@ $lang['search']['wrongquery'] = "Ungültige Suchanfrage";
 $lang['help']['title'] = "codeKB Hilfe";
 $lang['help']['nosuchtopic'] = "Es existiert kein Hilfethema mit dieser Bezeichnung";
 
+$lang['bbcode']['bold'] = "F";
+$lang['bbcode']['boldalt'] = "Fett";
+$lang['bbcode']['italic'] = "K";
+$lang['bbcode']['italicalt'] = "Kursiv";
+$lang['bbcode']['underline'] = "U";
+$lang['bbcode']['underlinealt'] = "Unterstrichen";
+$lang['bbcode']['size'] = "Größe ";
+$lang['bbcode']['center'] = "Mittig";
+$lang['bbcode']['centeralt'] = "Zentriert";
+$lang['bbcode']['indent'] = "Tab";
+$lang['bbcode']['indentalt'] = "Einrücken";
+$lang['bbcode']['line'] = "Linie";
+$lang['bbcode']['linealt'] = "Horizontale Linie";
+$lang['bbcode']['list'] = "Liste";
+$lang['bbcode']['listalt'] = "Liste";
+$lang['bbcode']['olist'] = "Liste 2";
+$lang['bbcode']['olistalt'] = "Nummerierte Liste";
+$lang['bbcode']['listitem'] = "Eintrag 1";
+$lang['bbcode']['url'] = "URL";
+$lang['bbcode']['urlalt'] = "Hyperlink";
+$lang['bbcode']['image'] = "Bild";
+$lang['bbcode']['imagealt'] = "Bild";
+$lang['bbcode']['anker'] = "#Anker";
+$lang['bbcode']['ankeralt'] = "Interner Link";
+$lang['bbcode']['pre'] = "Pre";
+$lang['bbcode']['prealt'] = "Vorformatierter Text";
+$lang['bbcode']['code'] = "Code ";
 
 ?>

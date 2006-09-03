@@ -5,6 +5,42 @@ There will be instructions if you want to upgrade below each release if there
 are special things you have to do.
 
 
+codeKB 0.2.003 (2006-09-03)
+---------------------------
+
+Added:
+
+- BBCode javascript buttons 
+
+- Statistics in admin menu
+
+Changed:
+
+- Drop down navigation now jumps with javascript
+
+- Attachments now have creation and modify date
+
+Fixed:
+
+- Bug 008502: IE CSS bug fixed (one of them...) 
+
+- MySQL: Creation date was changed when entry was updated
+
+
+Upgrade Instructions (from 0.2.002)
+
+To apply the database changes connect to your codeKB database and load either
+upgrade_pgsql.sql or upgrade_mysql.sql. This will add new fields to the files
+table setting the attachment's creation date to current timestamp.
+
+The config.php has two new settings:
+- $conf['general']['javascript'] - true/false. When false there will be no 
+bbcode buttons in the entry input form.
+- $conf['layout']['adminstatistics'] - true/false. Either show statistics in 
+admin menu or not.
+
+---
+
 
 codeKB 0.2.002 (2006-08-21)
 ---------------------------

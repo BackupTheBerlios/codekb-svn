@@ -159,7 +159,7 @@
 		
 		} // addtextarea
 
-		public function addcombo($id, $value, $text = null, $selected = null) {
+		public function addcombo($id, $value, $text = null, $selected = null, $autosend = null) {
 			
 			$this->_fields[$id]['_type_'] = "combo";
 			$this->_fields[$id][$value]['_selected_'] = $selected;
@@ -167,6 +167,8 @@
 				$this->_fields[$id][$value]['_text_'] = $text;
 			else
 				$this->_fields[$id][$value]['_text_'] = $value;
+			if ($autosend)
+				$this->_fields[$id]['_autosend_'] = $autosend;
 		
 		} // addcombo
 
@@ -205,6 +207,8 @@
 		} // remove
 		
 		private function output($id) {
+			
+			global $conf;
 			
 			$out = "";
 			
@@ -246,8 +250,12 @@
 									$out .= "\t\n";
 									break;
 				case "combo":		$combo = true;
-				case "multiselect": if ($combo)
-										$out .= "\t<select name = \"".htmlentities($id)."\" size =\"1\">\n";
+				case "multiselect": if ($combo) {
+										$out .= "\t<select name = \"".htmlentities($id)."\" size =\"1\" ";
+										if ($conf['general']['javascript'] && $this->_fields[$id]['_autosend_'])
+											$out .= "onchange=\"this.form.".htmlentities($this->_fields[$id]['_autosend_']).".click();\"";
+										$out .= ">\n";
+									}
 									else
 										$out .= "\t<select name = \"".htmlentities($id)."[]\" size =\"5\" multiple=\"multiple\">\n";
 										 

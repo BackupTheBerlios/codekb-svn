@@ -2,7 +2,7 @@
 
 	require_once("includes/global.php");
 	
-	$id = 0;
+	$catid = 0;
 	$category = null;
 	$user = null;	
 	$site = null;
@@ -22,7 +22,7 @@
 	$site->registerfunction("change", "showinput");
 	$site->registerfunction("delete", "showdelete");	
 
-	$site->registervariable("id", $id);
+	$site->registervariable("id", $catid);
 	
 	$site->start();
 	
@@ -33,21 +33,22 @@
 	function main() {
 		
 		global $lang;
-		global $id;
+		global $catid;
 		global $user;
 		global $site;
 		global $category;
 		
-		if (is_bool($id) || !is_numeric($id))
-			$id = 0;
+		if (is_bool($catid) || !is_numeric($catid))
+			$catid = 0;
 		try {
-			$category = new CodeKBCategory($id, $user);
+			$category = new CodeKBCategory($catid, $user);
 		} catch (Exception $e) {
 			$site->addcontent(notice($lang['category']['nosuchcat']));
 			return false;
 		}
 		
 		$site->navigation($category);
+		$site->catid($catid);
 		
 		return true;
 		

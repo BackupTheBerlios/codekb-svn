@@ -65,17 +65,47 @@ require_once("includes/global.php");
 		
 		$dialog->push("legend", $lang['admin']['menu']);
 		
-		$dialogitem = new CodeKBTemplate("dialogitem"); 
+		if ($conf['layout']['adminstatistics']) {
+			
+			$stats = $admin->statistics();
+			$unit = "b";
+			$size = $stats['size'];
+			if ( $size > 1024 ) { $size /= 1024; $unit = "kb"; }
+			if ( $size > 1024 ) { $size /= 1024; $unit = "mb"; }
+			$size = round($size).$unit;
+				
+			$dialogitem1 = new CodeKBTemplate("dialogitem"); 
 
-		$dialogitem->push("head", $lang['admin']['menuexplain']);
+			$dialogitem1->push("head", $lang['admin']['statistics']);
+	
+			$content = "<br /><br />\n";
+			$content = "<ul>\n";
+			$content .= "<li>".phrasereplace($lang['admin']['statusers'], "%1%", $stats['users']-1)."</li>\n";
+			$content .= "<li>".phrasereplace($lang['admin']['statgroups'], "%1%", $stats['groups']-1)."</li>\n";
+			$content .= "<li>".phrasereplace($lang['admin']['statcats'], "%1%", $stats['cats'])."</li>\n";
+			$content .= "<li>".phrasereplace($lang['admin']['statentries'], "%1%", $stats['entries'])."</li>\n";
+			$content .= "<li>".phrasereplace(phrasereplace($lang['admin']['statfiles'], "%1%", $stats['files']), "%2%", $size)."</li>\n";
+			$content .= "</ul>\n";
+		
+			$dialogitem1->push("content1", $content);
+			
+		}
+
+		$dialogitem2 = new CodeKBTemplate("dialogitem"); 
+
+		$dialogitem2->push("head", $lang['admin']['menuexplain']);
 		
 		$content = "<br /><br />\n";
 		$content .= icon("group", $lang['admin']['modifygroups'])." ".url("admin.php?action=groups", $lang['admin']['modifygroups'])."<br />\n";
 		$content .= icon("user", $lang['admin']['modifyusers'])." ".url("admin.php?action=users", $lang['admin']['modifyusers'])."<br />\n";
 		$content .= icon("lock",$lang['admin']['modifynobody'])." ".url("admin.php?group=0&action=modifygroup", $lang['admin']['modifynobody'])."<br />\n";		
 
-		$dialogitem->push("content1", $content);
-		$dialog->push("content", $dialogitem);
+		$dialogitem2->push("content1", $content);
+		$content = "";
+		if ($conf['layout']['adminstatistics'])
+			$content .= $dialogitem1->__toString();
+		$content .= $dialogitem2->__toString();
+		$dialog->push("content", $content);
 		
 		$site->addcontent($dialog);
 	
@@ -252,10 +282,10 @@ require_once("includes/global.php");
 		$form4->addhidden("group", $group);
 		$categories = $admin->listcategories();
 
-		$form4->addcombo("cat", 0, $lang['category']['root']);
+		$form4->addcombo("cat", 0, $lang['category']['root'], null, "choosecat");
 
 		foreach ($categories as $val) 
-			$form4->addcombo("cat", $val['id'], str_repeat("-", ($val['reclevel']) *2)." ".$val['name']);  
+			$form4->addcombo("cat", $val['id'], str_repeat("-", ($val['reclevel']) *2)." ".$val['name'], null, "choosecat");  
 
 		$form4->addbutton("choosecat", $lang['general']['submit']);
 		$form4->addbutton("cancel");
@@ -472,7 +502,7 @@ require_once("includes/global.php");
 		$content .= $form4->tail();
 
 		if ($form5) {
-			$content .= "<br />\n";
+			$content .= "<br /><br />\n";
 			$content .= $form5->head();
 			$content .= $form5->get("recursive");
 			$content .= "<br /><br />\n";

@@ -90,7 +90,9 @@ CREATE TABLE files (
     fs_name character varying(255),
     size integer,
     symbol character varying(255),
-    highlight character varying(255)
+    highlight character varying(255),
+    created timestamp without time zone NOT NULL,
+    modified timestamp without time zone
 );
 
 CREATE TABLE group_user (
@@ -130,7 +132,7 @@ COPY entries (id, name, symbol, author, description, documentation, created, mod
 COPY entry_cat (cat, entry) FROM stdin;
 \.
 
-COPY files (id, entry, name, fs_name, size, symbol, highlight) FROM stdin;
+COPY files (id, entry, name, fs_name, size, symbol, highlight, created, modified) FROM stdin;
 \.
 
 COPY group_user (groupid, userid) FROM stdin;

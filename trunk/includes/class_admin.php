@@ -9,6 +9,34 @@
 		
 		} // construct
 		
+		public function statistics() {
+			
+			$stats = array();
+			
+			$db = new CodeKBDatabase();
+			
+			$stats['users'] = count($this->listusers());
+			$stats['groups'] = count($this->listgroups());
+			
+			$db->dosql("SELECT id FROM categories");
+			
+			$stats['cats'] = $db->countrows();
+			
+			$db->dosql("SELECT id FROM entries");
+			
+			$stats['entries'] = $db->countrows();
+			
+			$db->dosql("SELECT id FROM files");
+			
+			$stats['files'] = $db->countrows();
+			
+			$db->dosql("SELECT sum(size) AS filesize FROM files");
+			
+			$stats['size'] = $db->column("filesize");
+			
+			return $stats;
+			
+		} // statistics
 
 		public function usersgroups($user) {
 

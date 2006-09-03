@@ -27,7 +27,7 @@ CREATE TABLE `entries` (
     `author` varchar(255),
     `description` varchar(255),
     `documentation` text,
-    `created` timestamp NOT NULL,
+    `created` timestamp,
     `modified` timestamp,
     PRIMARY KEY (`id`)
 );
@@ -48,6 +48,8 @@ CREATE TABLE `files` (
     `size` int(20),
     `symbol` varchar(255),
     `highlight` varchar(255),
+    `created` timestamp,
+    `modified` timestamp,
     PRIMARY KEY (`id`)
 );
 

@@ -255,14 +255,15 @@
 					break;
 			}
 	
-			$db->dosql("INSERT INTO files (id, entry, name, fs_name, size, symbol, highlight) " .
+			$db->dosql("INSERT INTO files (id, entry, name, fs_name, size, symbol, highlight, created) " .
 							"VALUES ({$db->number($id)}, " .
 									"{$db->number($this->_id)}, " .
 									"'{$db->string($HTTP_POST_FILES[$file]['name'])}', " .
 									"'{$db->string($fs_name)}', " .
 									"{$db->number($size)}, " .
 									"'{$db->string($symbol)}', " .
-									"'{$db->string($type)}')");
+									"'{$db->string($type)}', ".
+									"now())");
 	
 			$db->commit();
 	

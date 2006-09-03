@@ -2,8 +2,8 @@
 
 	require_once("includes/global.php");
 	
-	$id = null;
-	$cat = null;
+	$entryid = null;
+	$catid = null;
 	$category = null;
 	$entry = null;
 	$user = null;	
@@ -24,8 +24,8 @@
 	$site->registerfunction("link", "showlinks");
 	$site->registerfunction("files", "showfiles");	
 
-	$site->registervariable("id", $id);
-	$site->registervariable("cat", $cat);
+	$site->registervariable("id", $entryid);
+	$site->registervariable("cat", $catid);
 	
 	
 	$site->start();
@@ -37,31 +37,34 @@
 	function main() {
 		
 		global $lang;
-		global $id;
-		global $cat;		
+		global $entryid;
+		global $catid;		
 		global $user;
 		global $site;
 		global $category;
 		global $entry;
 		
-		if (!is_bool($cat) && is_numeric($cat))
+		if (!is_bool($catid) && is_numeric($catid))
 			try {
-				$category = new CodeKBCategory($cat, $user);
+				$category = new CodeKBCategory($catid, $user);
 			} catch (Exception $e) {
 				$site->addcontent(notice($lang['category']['nosuchcat']));
 				return false;
 			}
 
-		if (!is_bool($id) && is_numeric($id))
+		if (!is_bool($entryid) && is_numeric($entryid))
 			try {
-				$entry = new CodeKBEntry($id, $user);
+				$entry = new CodeKBEntry($entryid, $user);
 			} catch (Exception $e) {
 				$site->addcontent(notice($lang['entry']['nosuchentry']));
 				return false;
 			}
 		
-		if ($category)
+		if ($category) {
 			$site->navigation($category, $entry);
+			$catid = $category->id();
+			$site->catid($catid);
+		}
 			
 		return true;
 		
@@ -72,22 +75,19 @@
 		global $lang;
 		global $user;
 		global $site;
-		global $category;
+		global $catid;
 		global $entry;
 		
-		if ($category)
-			$cat = $category->id();
-				
 		$site->title($entry->name());
 	
 		if ($user->entrycan("changeentry", $entry)) {
-			$site->addmenu("entry.php?id=".$entry->id()."&cat=".$cat."&action=change", $lang['menu']['modifyentry'], $lang['menu']['modifyentryalt']);
-			$site->addfooter("entry.php?id=".$entry->id()."&cat=".$cat."&action=modify", "configure", $lang['menu']['configureentry'], $lang['menu']['configureentryalt']);
-			$site->addfooter("entry.php?id=".$entry->id()."&cat=".$cat."&action=files", "files", $lang['menu']['attach'], $lang['menu']['attachalt']);
+			$site->addmenu("entry.php?id=".$entry->id()."&cat=".$catid."&action=change", $lang['menu']['modifyentry'], $lang['menu']['modifyentryalt']);
+			$site->addfooter("entry.php?id=".$entry->id()."&cat=".$catid."&action=modify", "configure", $lang['menu']['configureentry'], $lang['menu']['configureentryalt']);
+			$site->addfooter("entry.php?id=".$entry->id()."&cat=".$catid."&action=files", "files", $lang['menu']['attach'], $lang['menu']['attachalt']);
 		} 
 
 		if ($user->entrycan("addentry", $entry) || $user->entrycan("delentry", $entry))
-			$site->addfooter("entry.php?id=".$entry->id()."&cat=".$cat."&action=link", "links", $lang['menu']['linkentry'], $lang['menu']['linkentryalt']);
+			$site->addfooter("entry.php?id=".$entry->id()."&cat=".$catid."&action=link", "links", $lang['menu']['linkentry'], $lang['menu']['linkentryalt']);
 			
 		$site->addfooter("help.php?on=entry", "help", $lang['menu']['help'], $lang['menu']['helpalt']);			
 		
@@ -120,8 +120,8 @@
 					if ($i%$count==0)
 						$listitem->push("first", true);
 					
-					$listitem->push("icon", url("file.php?id=".$val['id']."&cat=".$cat, icon($val['symbol'], $val['name']), $val['name']));
-					$content = url("file.php?id=".$val['id']."&cat=".$cat, $val['name']);
+					$listitem->push("icon", url("file.php?id=".$val['id']."&cat=".$catid, icon($val['symbol'], $val['name']), $val['name']));
+					$content = url("file.php?id=".$val['id']."&cat=".$catid, $val['name']);
 					$content .= " (";
 					$size = $val['size'];
 					$unit = "b";
@@ -150,8 +150,10 @@
 	function showinput() {
 
 		global $lang;
+		global $conf;
 		global $user;
 		global $site;
+		global $catid;
 		global $category;
 		global $entry;
 		
@@ -174,19 +176,16 @@
 			$site->addcontent(notice($lang['entry']['nochangeallowed']));
 			return false;
 		}
-
-		if ($category)
-			$cat = $category->id();
-		
+	
 		if ($_POST['cancel'])
 			if ($change)
-				redirect("entry.php?id=".$entry->id()."&cat=".$cat);
+				redirect("entry.php?id=".$entry->id()."&cat=".$catid);
 			else
-				redirect("category.php?id=".$cat);
+				redirect("category.php?id=".$catid);
 			
 		$form = new CodeKBForm("entry.php", ($change?"modify":"new"));
 		
-		$form->addhidden("cat", $cat);
+		$form->addhidden("cat", $catid);
 		if ($change)
 			$form->addhidden("id", $entry->id());
 		
@@ -231,7 +230,7 @@
 				// Change the entry
 				try {
 					$entry->change($form->value("title"), $form->value("author"), $form->value("symbol"), $form->value("description"), $form->value("documentation"));
-					redirect("entry.php?id=".$entry->id()."&cat=".$cat);
+					redirect("entry.php?id=".$entry->id()."&cat=".$catid);
 				} catch (Exception $e) {
 					$site->addcontent(notice($lang['entry']['failedchange']));
 				}
@@ -267,7 +266,42 @@
 		
 		$dialogitem->push("top", $content);
 	 
-		$dialogitem->push("content1", $form->get());
+		$content = $form->get("description")."<br /><br />\n";
+		$content .= $form->get("symbol")."<br /><br />\n";
+		
+		if ($conf['general']['javascript']) {
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[b][/b]';\" value=\"{$lang['bbcode']['bold']}\" title=\"{$lang['bbcode']['boldalt']}\" style=\"width: auto; font-weight: bold; padding-left:3px; padding-right:3px;\" />\n";
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[i][/i]';\" value=\"{$lang['bbcode']['italic']}\" title=\"{$lang['bbcode']['italicalt']}\" style=\"width: auto; font-style: italic; padding-left:3px; padding-right:3px;\" />\n";
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[u][/u]';\" value=\"{$lang['bbcode']['underline']}\" title=\"{$lang['bbcode']['underlinealt']}\" style=\"width: auto; text-decoration:underline; padding-left:3px; padding-right:3px;\" />\n";
+			$content .= $lang['bbcode']['size'];
+			$content .= "<select name=\"bbsize\" size=\"1\" onchange=\"this.form.documentation.value=this.form.documentation.value+'[size='+this.form.bbsize.value+'][/size]';\">\n";
+			$content .= "<option value=\"1\">1</option>\n";
+			$content .= "<option value=\"2\">2</option>\n";
+			$content .= "<option value=\"3\">3</option>\n";
+			$content .= "<option value=\"4\">4</option>\n";
+			$content .= "<option value=\"5\">5</option>\n";
+			$content .= "<option value=\"6\">6</option>\n";
+			$content .= "<option value=\"7\">7</option>\n";
+			$content .= "</select>\n";
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[center][/center]';\" value=\"{$lang['bbcode']['center']}\" title=\"{$lang['bbcode']['centeralt']}\" style=\"width: auto; padding-left:3px; padding-right:3px;\" />\n"; 
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[-]';\" value=\"{$lang['bbcode']['indent']}\" title=\"{$lang['bbcode']['indentalt']}\" style=\"width: auto; padding-left:3px; padding-right:3px;\" />\n";			
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[--]';\" value=\"{$lang['bbcode']['line']}\" title=\"{$lang['bbcode']['linealt']}\" style=\"width: auto; padding-left:3px; padding-right:3px;\" />\n";
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[list]\\n[*]{$lang['bbcode']['listitem']}\\n[/list]';\" value=\"{$lang['bbcode']['list']}\" title=\"{$lang['bbcode']['listalt']}\" style=\"width: auto; padding-left:3px; padding-right:3px;\" />\n";
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[olist]\\n[*]{$lang['bbcode']['listitem']}\\n[/olist]';\" value=\"{$lang['bbcode']['olist']}\" title=\"{$lang['bbcode']['olistalt']}\" style=\"width: auto; padding-left:3px; padding-right:3px;\" />\n";
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[url][/url]';\" value=\"{$lang['bbcode']['url']}\" title=\"{$lang['bbcode']['urlalt']}\" style=\"width: auto; padding-left:3px; padding-right:3px;\" />\n";
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[anker= ]';\" value=\"{$lang['bbcode']['anker']}\" title=\"{$lang['bbcode']['ankeralt']}\" style=\"width: auto; padding-left:3px; padding-right:3px;\" />\n";
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[img][/img]';\" value=\"{$lang['bbcode']['image']}\" title=\"{$lang['bbcode']['imagealt']}\" style=\"width: auto; padding-left:3px; padding-right:3px;\" />\n";
+			$content .= "<input type=\"button\" onclick=\"this.form.documentation.value=this.form.documentation.value+'[pre][/pre]';\" value=\"{$lang['bbcode']['pre']}\" title=\"{$lang['bbcode']['prealt']}\" style=\"width: auto; padding-left:3px; padding-right:3px;\" />\n";
+			$content .= $lang['bbcode']['code'];
+			$content .= "<select name=\"bbhigh\" size=\"1\" onchange=\"this.form.documentation.value=this.form.documentation.value+'[code='+this.form.bbhigh.value+'][/code]';\">\n";
+			foreach ($conf['highlight']['languages'] as $val)
+				$content .= "<option value=\"".htmlentities($val)."\">{$val}</option>\n";
+			$content .= "</select>\n";			
+		}
+		
+		$content .= $form->get("documentation")."<br /><br />\n";
+		
+		$dialogitem->push("content1", $content);
 		$dialogitem->push("tail", $form->tail());
 		
 		$dialogcode = $dialogitem->__toString();
@@ -295,7 +329,7 @@
 		global $lang;
 		global $user;
 		global $site;
-		global $category;
+		global $catid;
 		global $entry;
 		
 		$site->addfooter("help.php?on=entry#change", "help", $lang['menu']['help'], $lang['menu']['helpalt']);
@@ -307,9 +341,6 @@
 			return false;
     	}
 		
-		if ($category)
-			$cat = $category->id();
-			
 		$dialog = new CodeKBTemplate("dialog");
 		$dialog->push("legend", $lang['entry']['change']);
 		
@@ -318,12 +349,12 @@
 		$dialogitem->push("head", phrasereplace($lang['entry']['choosechange'], "%1%", htmlentities($entry->name())));
 		
 		$content = "<br /><br />\n";
-		$content .= icon("configure", $lang['entry']['modify'])." ".url("entry.php?id=".$entry->id()."&cat=".$cat."&action=modify", $lang['entry']['modify'])."<br />\n";
+		$content .= icon("configure", $lang['entry']['modify'])." ".url("entry.php?id=".$entry->id()."&cat=".$catid."&action=modify", $lang['entry']['modify'])."<br />\n";
 		if ($user->entrycan("addentry", $entry) || $user->entrycan("delentry", $entry))
-			$content .=icon("links", $lang['entry']['link'])." ".url("entry.php?id=".$entry->id()."&cat=".$cat."&action=link", $lang['entry']['link'])."<br />\n";
-		$content .= icon("files", $lang['entry']['files'])." ".url("entry.php?id=".$entry->id()."&cat=".$cat."&action=files", $lang['entry']['files'])."<br />\n";
+			$content .=icon("links", $lang['entry']['link'])." ".url("entry.php?id=".$entry->id()."&cat=".$catid."&action=link", $lang['entry']['link'])."<br />\n";
+		$content .= icon("files", $lang['entry']['files'])." ".url("entry.php?id=".$entry->id()."&cat=".$catid."&action=files", $lang['entry']['files'])."<br />\n";
 		$content .= "<div style=\"text-align: right\">";
-		$content .=url("entry.php?id=".$entry->id()."&cat=".$cat, phrasereplace($lang['general']['backto'], "%1%", htmlentities($entry->name())), $entry->name());
+		$content .= url("entry.php?id=".$entry->id()."&cat=".$catid, phrasereplace($lang['general']['backto'], "%1%", htmlentities($entry->name())), $entry->name());
 		
 		$dialogitem->push("content1", $content);
 		
@@ -340,7 +371,7 @@
 		global $lang;
 		global $user;
 		global $site;
-		global $category;
+		global $catid;
 		global $entry;
 	
 		$site->title($lang['entry']['link']);
@@ -352,18 +383,15 @@
 			return false;
 	    }
     
-    	if ($category)
-    		$cat = $category->id();
-    	
     	if ($_POST['cancel'])
-    		redirect("entry.php?id=".$entry->id()."&cat=".$cat);
+    		redirect("entry.php?id=".$entry->id()."&cat=".$catid);
     
 
 		if ($user->entrycan("addentry", $entry)) {  
 			
 			$form1 = new CodeKBForm("entry.php", "link");
 			$form1->addhidden("id", $entry->id());
-			$form1->addhidden("cat", $cat);
+			$form1->addhidden("cat", $catid);
 			
 			$tmpcat = new CodeKBCategory(0, $user);
 			
@@ -386,7 +414,7 @@
 			
 			$form2 = new CodeKBForm("entry.php", "link");
 			$form2->addhidden("id", $entry->id());
-			$form2->addhidden("cat", $cat);
+			$form2->addhidden("cat", $catid);
 			
 			$catsofentry = $entry->categories();
 			foreach ($catsofentry as $val) {
@@ -438,7 +466,7 @@
 			}
 					
 			if (!$user->entrycan("see", $entry, false))
-				redirect("category.php?id=".$cat);
+				redirect("category.php?id=".$catid);
 
 				
 			$site->addcontent(notice($notice));
@@ -504,27 +532,24 @@
 		global $conf;
 		global $user;
 		global $site;
-		global $category;
+		global $catid;
 		global $entry;
 	
 		$site->title($lang['entry']['files']);
 		
 		$site->addfooter("help.php?on=file", "help", $lang['menu']['help'], $lang['menu']['helpalt']);
 		
-		if ($category)
-    		$cat = $category->id();
-			
 	    if ( ! $user->entrycan("changeentry", $entry) ) { 
 			$site->addcontent(notice($lang['entry']['nochangeallowed']));
 			return false;
     	}
     
     	if ($_POST['cancel'])
-    		redirect("entry.php?id=".$entry->id()."&cat=".$cat);
+    		redirect("entry.php?id=".$entry->id()."&cat=".$catid);
 
 		$form1 = new CodeKBForm("entry.php", "files");
 		$form1->addhidden("id", $entry->id());
-		$form1->addhidden("cat", $cat);
+		$form1->addhidden("cat", $catid);
 
 		$form1->addfile("upload");
 		$form1->addlabel("upload", $lang['file']['upload']);
@@ -547,12 +572,12 @@
 	
 		$form2 = new CodeKBForm("entry.php", "files");
 		$form2->addhidden("id", $entry->id());
-		$form2->addhidden("cat", $cat);
+		$form2->addhidden("cat", $catid);
 		
 		$filesofentry = $entry->listfiles();
 		
 		foreach ($filesofentry as $val)
-			$form2->addcheckbox("file_".$val['id'], icon($val['symbol'], $val['name'])." ".url("file.php?id=".$val['id']."&cat=".$cat, $val['name'])." (".url("file.php?id=".$val['id']."&cat=".$cat."&action=modify",$lang['general']['modify']).")");  
+			$form2->addcheckbox("file_".$val['id'], icon($val['symbol'], $val['name'])." ".url("file.php?id=".$val['id']."&cat=".$catid, $val['name'])." (".url("file.php?id=".$val['id']."&cat=".$catid."&action=modify",$lang['general']['modify']).")");  
 
 		$form2->addbutton("removefile", $lang['general']['delete']);
 		$form2->addbutton("cancel");
@@ -564,7 +589,7 @@
 				$newfile = new CodeKBFile($ret, $user);
 				$site->addcontent(notice($lang['file']['addsucc']));
 				
-				$form2->addcheckbox("file_".$newfile->id(), icon($newfile->symbol(), $newfile->name())." ".url("file.php?id=".$newfile->id()."&cat=".$cat, $newfile->name())." (".url("file.php?id=".$newfile->id()."&cat=".$cat."&action=modify",$lang['general']['modify']).")");
+				$form2->addcheckbox("file_".$newfile->id(), icon($newfile->symbol(), $newfile->name())." ".url("file.php?id=".$newfile->id()."&cat=".$catid, $newfile->name())." (".url("file.php?id=".$newfile->id()."&cat=".$catid."&action=modify",$lang['general']['modify']).")");
 				unset ($newfile);
 			} catch (Exception $e) {
 				if ($e->getCode() == 1) {
@@ -610,7 +635,7 @@
 		$dialogitem1->push("content1", $form1->get());
 		$dialogitem1->push("tail", $form1->tail());
 			
-		$dialogcode .= $dialogitem1->__toString();; 
+		$dialogcode .= $dialogitem1->__toString(); 
 		
 		$content = $form2->head();
 		$content .= $lang['file']['removeexplain']."<br /><br />\n";
@@ -624,7 +649,7 @@
 		$dialogitem2->push("content1", $content);
 		$dialogitem2->push("tail", $form2->tail());
 			
-		$dialogcode .= $dialogitem2->__toString();; 
+		$dialogcode .= $dialogitem2->__toString();
 
 		$dialog->push("content", $dialogcode);
 		

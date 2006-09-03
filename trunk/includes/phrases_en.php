@@ -121,6 +121,12 @@ $lang['entry']['failedchange'] = "Could not change entry";
 $lang['entry']['duplicate'] = "Entry already linked in this category";
 
 $lang['admin']['accessdenied'] = "This section is for admin only";
+$lang['admin']['statistics'] = "<strong>codeKB statistics:</strong>";
+$lang['admin']['statusers'] = "<strong>%1%</strong> registered users";
+$lang['admin']['statgroups'] = "<strong>%1%</strong> usergroups";
+$lang['admin']['statcats'] = "<strong>%1%</strong> categories";
+$lang['admin']['statentries'] = "<strong>%1%</strong> entries";
+$lang['admin']['statfiles'] = "<strong>%1%</strong> attachments with a total size of <strong>%2%</strong>";
 $lang['admin']['menu'] = "Admin menu";
 $lang['admin']['menuexplain'] = "Choose what you want to administrate.";
 $lang['admin']['modifygroups'] = "Add/Remove/Change groups";
@@ -234,5 +240,31 @@ $lang['search']['wrongquery'] = "This query could not be processed";
 $lang['help']['title'] = "codeKB Help";
 $lang['help']['nosuchtopic'] = "There is no help topic with this id";
 
-
+$lang['bbcode']['bold'] = "B";
+$lang['bbcode']['boldalt'] = "Bold";
+$lang['bbcode']['italic'] = "I";
+$lang['bbcode']['italicalt'] = "Italic";
+$lang['bbcode']['underline'] = "U";
+$lang['bbcode']['underlinealt'] = "Underline";
+$lang['bbcode']['size'] = "Size ";
+$lang['bbcode']['center'] = "Center";
+$lang['bbcode']['centeralt'] = "Center";
+$lang['bbcode']['indent'] = "Indent";
+$lang['bbcode']['indentalt'] = "Indent";
+$lang['bbcode']['line'] = "Line";
+$lang['bbcode']['linealt'] = "Horizontal line";
+$lang['bbcode']['list'] = "List";
+$lang['bbcode']['listalt'] = "List";
+$lang['bbcode']['olist'] = "List 2";
+$lang['bbcode']['olistalt'] = "Ordered list";
+$lang['bbcode']['listitem'] = "Item 1";
+$lang['bbcode']['url'] = "URL";
+$lang['bbcode']['urlalt'] = "Hyperlink";
+$lang['bbcode']['image'] = "Image";
+$lang['bbcode']['imagealt'] = "Image";
+$lang['bbcode']['anker'] = "#Anker";
+$lang['bbcode']['ankeralt'] = "Internal link";
+$lang['bbcode']['pre'] = "Pre";
+$lang['bbcode']['prealt'] = "Preformatted text";
+$lang['bbcode']['code'] = "Code ";
 ?>

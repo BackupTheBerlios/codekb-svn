@@ -120,6 +120,8 @@ be sure to save this file.
 While codeKB is still under heavy development there could be changes in the 
 config.php which can cause your old cinfig to be invalid. This will be 
 mentioned in the changelog. Then you will have to reset your settings.
+When there are updates to the database structure you should _really_ backup
+your data!
 
 
 Installation
@@ -219,6 +221,8 @@ The settings are:
 
 ['general']['stylesheet']: The name of the stylesheet containg most of the 
 						   layout of codeKB.
+						   
+['general']['javascript']: Turning on and off javascript use in codeKB.
 
 ['db']['type']: 'pgsql' if using postgresql or 'mysql'.
 
@@ -292,6 +296,9 @@ The settings are:
 ['layout']['jumptonavigation']: If true a drop down menu will appear in the 
 								codeKB footer to navigate through categories - 
 								may slow down things.
+								
+['layout']['adminstatistics']: If true the admin menu shows some statistics of 
+							   codeKB.
 
 ['perf']['rightscache']: When having lots of categories you can set this 
 						 setting to a higher number to increase performance. 
@@ -355,7 +362,7 @@ done and a backtrace if possible (debug = true).
 Bugs can be placed at the berlios bug tracker.
 
 Currently known bugs and problems:
-- the dialog template does not show up as intended in IE
+- css in IE looks horrible
 - some forms allow browser POST reload which can cause doubled entries
 - using code listings with highlight colors makes things very slow
 

@@ -8,6 +8,7 @@ $conf['general']['language'] = "phrases.php";											// language phrase file
 $conf['general']['rewrite'] = true;												// use mod_rewrite?
 $conf['general']['title'] = "codeKB - Source Code Knowledge Base";								// browser title
 $conf['general']['stylesheet'] = "codekb.css";											// relative stylesheet path 
+$conf['general']['javascript'] = true;												// Turn on and off javascript
 
 // database settings
 $conf['db']['type'] = "pgsql";													// pgsql or mysql
@@ -47,6 +48,7 @@ $conf['layout']['showcountsrecursive'] = true;											// Show counts of subca
 $conf['layout']['dateformat'] = "Y-m-d H:i:s";											// PHP format string for timestamps
 $conf['layout']['entriesperpage'] = 25;												// Default number of entries per page
 $conf['layout']['jumptonavigation'] = true;											// Show the drop down navigator
+$conf['layout']['adminstatistics'] = true;											// Show some statistics in the admin menu
 
 // performance
 $conf['perf']['rightscache'] = 50;												// How many entries in the access right cache

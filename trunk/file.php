@@ -2,8 +2,8 @@
 
 	require_once("includes/global.php");
 	
-	$id = null;
-	$cat = null;
+	$fileid = null;
+	$catid = null;
 	$category = null;
 	$file = null;
 	$user = null;	
@@ -21,8 +21,8 @@
 	$site->registerfunction("modify", "showinput");
 	$site->registerfunction("download", "showdownload");
 
-	$site->registervariable("id", $id);
-	$site->registervariable("cat", $cat);
+	$site->registervariable("id", $fileid);
+	$site->registervariable("cat", $catid);
 	
 	
 	$site->start();
@@ -34,23 +34,23 @@
 	function main() {
 		
 		global $lang;
-		global $id;
-		global $cat;		
+		global $fileid;
+		global $catid;		
 		global $user;
 		global $site;
 		global $category;
 		global $file;
 		
-		if (!is_bool($cat) && is_numeric($cat))
+		if (!is_bool($catid) && is_numeric($catid))
 			try {
-				$category = new CodeKBCategory($cat, $user);
+				$category = new CodeKBCategory($catid, $user);
 			} catch (Exception $e) {
 				$site->addcontent(notice($lang['category']['nosuchcat']));
 				return false;
 			}
 
 		try {
-			$file = new CodeKBFile($id, $user);
+			$file = new CodeKBFile($fileid, $user);
 		} catch (Exception $e) {
 			$site->addcontent(notice($lang['file']['nosuchfile']));
 			return false;
@@ -61,8 +61,11 @@
 			return false;
 		}
 					
-		if ($category)
+		if ($category) {
 			$site->navigation($category, $file->entry());
+			$catid = $category->id();
+			$site->catid($catid);
+		}
 
 		return true;
 		
@@ -93,7 +96,7 @@
 		global $conf;		
 		global $user;
 		global $site;
-		global $category;
+		global $catid;
 		global $file;
 		
 		$site->title($file->name());
@@ -103,20 +106,19 @@
 		if ($file->highlight() == $conf['highlight']['binary'])
 			redirect("file.php?id=".$file->id()."&action=download");
 			
-		if ($category)
-			$cat = $category->id();
-			
 		if ($user->entrycan("changeentry", $file->entry())) {
-			$site->addmenu("file.php?id=".$file->id()."&cat=".$cat."&action=modify", $lang['menu']['file'], $lang['menu']['filealt']);
-			$site->addfooter("file.php?id=".$file->id()."&cat=".$cat."&action=modify", "configure", $lang['menu']['file'], $lang['menu']['filealt']);
-			$site->addfooter("entry.php?id=".$file->entry()->id()."&cat=".$cat."&action=files", "files", $lang['menu']['attach'], $lang['menu']['attachalt']);
+			$site->addmenu("file.php?id=".$file->id()."&cat=".$catid."&action=modify", $lang['menu']['file'], $lang['menu']['filealt']);
+			$site->addfooter("file.php?id=".$file->id()."&cat=".$catid."&action=modify", "configure", $lang['menu']['file'], $lang['menu']['filealt']);
+			$site->addfooter("entry.php?id=".$file->entry()->id()."&cat=".$catid."&action=files", "files", $lang['menu']['attach'], $lang['menu']['attachalt']);
 		} 
 		
 		$entrytpl = new CodeKBTemplate("entry");		
 		
 		$entrytpl->push("icon", icon($file->symbol(), $file->name()));
 		$entrytpl->push("name", $file->name());		
-		$content = $lang['file']['download'].": ";
+		$content = $lang['entry']['createdate'].": <em>".$file->created()."</em> | ";
+		$content .= $lang['entry']['modifydate'].": <em>".($file->modified()?$file->modified():$lang['general']['never'])."</em>\n<br />\n";
+		$content .= $lang['file']['download'].": ";
 		$content .= url("file.php?id=".$file->id()."&action=download", $file->name());
 		$content .= " (";
 		$unit = "b";
@@ -124,7 +126,7 @@
 		if ( $size > 1024 ) { $size /= 1024; $unit = "kb"; }
 		if ( $size > 1024 ) { $size /= 1024; $unit = "mb"; }
 		$content .= round($size).$unit.") | ";
-		$content .= url("entry.php?id=".$file->entry()->id()."&cat=".$cat, phrasereplace($lang['general']['backto'], "%1%", "entry"));
+		$content .= url("entry.php?id=".$file->entry()->id()."&cat=".$catid, phrasereplace($lang['general']['backto'], "%1%", htmlentities($file->entry()->name())), $file->entry()->name());
 		$entrytpl->push("subheader", $content);
 	
 		$code = "[code=".$file->highlight()."]";
@@ -145,7 +147,7 @@
 		global $conf;		
 		global $user;
 		global $site;
-		global $category;
+		global $catid;
 		global $file;
 
 		$site->title($lang['file']['modify']);
@@ -160,13 +162,9 @@
 		if ($_POST['cancel'])
     		redirect("entry.php?id=".$file->entry()->id());
 
-		if ($category)
-			$cat = $category->id();
-	
-		
 		$form = new CodeKBForm("file.php", "modify");
 		$form->addhidden("id", $file->id());
-		$form->addhidden("cat", $cat);
+		$form->addhidden("cat", $catid);
 
 		$form->addtext("name", $file->name());
 		$form->addlabel("name",	$lang['file']['name']);
@@ -204,9 +202,9 @@
 				try {
 					$file->change($form->value("name"), $form->value("highlight"), $form->value("symbol"), $upload);
 					if ($form->value("highlight") == $conf['highlight']['binary'])
-						redirect("entry.php?id=".$file->entry()->id()."&cat=".$cat);
+						redirect("entry.php?id=".$file->entry()->id()."&cat=".$catid);
 					else
-						redirect("file.php?id=".$file->id()."&cat=".$cat);
+						redirect("file.php?id=".$file->id()."&cat=".$catid);
 				} catch (Exception $e) {
 					$site->addcontent(notice($lang['entry']['failedfilechange']));	
 				}

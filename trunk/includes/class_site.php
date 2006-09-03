@@ -24,6 +24,8 @@
 		
 		private $_user = null;
 		
+		private $_catid = 0;
+		
 		private $_starttime = 0;
 		
 		public function __construct(CodeKBUser &$user) {
@@ -51,6 +53,12 @@
 			return $this->_currentaction;
 			
 		} // action
+		
+		public function catid($id) {
+			
+			$this->_catid = $id;
+			
+		} // catid
 		
 		public function registermain($func) {
 			
@@ -242,12 +250,12 @@
 				$footerform = new CodeKBForm("category.php", "list");
 				$tmpcat = new CodeKBCategory(0, $this->_user);
 			
-				$footerform->addcombo("id", "0", $lang['category']['root']);
+				$footerform->addcombo("id", "0", $lang['category']['root'], $this->_catid==0, "jump");
 			
 				$array = $tmpcat->listcategories("name", 1);
 				foreach ($array as $val) 
 					if ($this->_user->can("see", $val['id']))
-						$footerform->addcombo("id", $val['id'], str_repeat("-", ($val['reclevel']) *2)." ".$val['name']);
+						$footerform->addcombo("id", $val['id'], str_repeat("-", ($val['reclevel']) *2)." ".$val['name'], $this->_catid==$val['id'], "jump");
 				unset($tmpcat);
 				
 				$footerform->addbutton("jump", $lang['general']['go']);

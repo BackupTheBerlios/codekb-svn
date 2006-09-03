@@ -1,7 +1,7 @@
 </div>
 
 	
-<div style="height: 23px;">&nbsp;</div>
+	<div style="height: 23px;">&nbsp;</div>
 
 	<div id="footer" class="link2">
 

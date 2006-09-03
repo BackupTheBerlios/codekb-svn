@@ -16,6 +16,10 @@
 		
 		private $_highlight = "";
 		
+		private $_created = "";
+		
+		private $_modified = "";		
+		
 		private $_downloadable = false;
 		
 		public function __construct($id, CodeKBUser &$user) {
@@ -30,7 +34,9 @@
 						      "fs_name, ".
 							  "size, ".
 							  "symbol, ".
-							  "highlight ".
+							  "highlight, ".
+							  "created, ".
+							  "modified ".
 							  "FROM files ".
 							  "WHERE id = {$db->number($this->_id)}");
 								
@@ -47,6 +53,12 @@
 			$this->_size = $db->column("size");
 			$this->_symbol = $db->column("symbol");
 			$this->_highlight = $db->column("highlight");				
+			$this->_created = $db->column("created");
+			$this->_modified = $db->column("modified");
+			
+			// For mysql...
+			if ($this->_modified == "0000-00-00 00:00:00")
+				$this->_modified = null;
 		
 		} // construct
 		
@@ -85,6 +97,18 @@
 			return $this->_highlight;
 			
 		} // highlight
+
+		public function created() {
+			
+			return CodeKBDatabase::datetime($this->_created);
+			
+		} // created
+
+		public function modified() {
+			
+			return CodeKBDatabase::datetime($this->_modified);
+			
+		} // modified
 		
 		public function downloadable() {
 			
@@ -160,7 +184,8 @@
 						"fs_name = '{$db->string($fs_name)}', " .
 						"size = {$db->number($size)}, " .
 						"highlight = '{$db->string($highlight)}', " .
-						"symbol = '{$db->string($symbol)}' " .
+						"symbol = '{$db->string($symbol)}', " .
+						"modified = now() ".
 						"WHERE id = {$db->number($this->_id)}");
 						
 			if (!$db->success())
