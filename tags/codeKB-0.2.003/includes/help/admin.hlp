@@ -1,0 +1,48 @@
+[url=help.php]Help index[/url]
+
+[anker=top]
+[size=6]Admin help[/size]
+[list]
+[*][url=#who]Who is admin?[/url]
+[*][url=#user]Users[/url]
+[*][url=#group]Groups[/url]
+[*][url=#anon]Anonymous[/url]
+[/list]
+[--]
+[anker=who][url=#top]^Top[/url]
+
+[b]Who is admin?[/b]
+
+Per default there is no special admin user in codeKB. So even anonymous users can administrate. To restrict this to one or more users change the according line in the codeKB config file.
+Users you can administrate have the 'Admin panel' entry in their menu.
+[--]
+[anker=user][url=#top]^Top[/url]
+
+[b]Users[/b]
+
+To change or delete user accounts select 'Admin panel' from the menu and go to 'Change/Remove users'.
+You can change a user's name (this must be unique) and give him a new password - you will not be able to see its old own.
+By selecting the 'Delete this user' box the account will be deleted.
+You can also add or remove the user to and from user groups here.
+His access [url=help.php?on=rights]rights[/url] will always be the maximum of his groups.
+[--]
+[anker=group][url=#top]^Top[/url]
+
+[b]Groups[/b]
+
+To add, change or delete user groups select 'Admin panel' from the menu and go to 'Add/Remove/Change groups'.
+You can add a new group with an unique name. Select an existing group from which you want to clone the access [url=help.php?on=rights]rights[/url]. The new group will have the excat same rights - you can change them afterwards.
+Below you can select groups to remove - when removing a group all users in there will lost their group membership but will not be deleted.
+Selecting 'Modify' will give you the chance to change the group's name, add or remove users or change access rights for this group.
+To change rights select a [url=help.php?on=category]category[/url] and press send. 
+You will see eight checkboxes describing what rights this group has in the selected category.
+Check the box above to set the new rights not only on that single category but on all subcategories, too.
+[--]
+[anker=anon][url=#top]^Top[/url]
+
+[b]Anonymous[/b]
+
+When not logged in a user has the access [url=help.php?on=rights]rights[/url] you set in the 'Admin panel' at 'Modify access rights for anonymous'.
+Here you can change rights for every [url=help.php?on=category]category[/url] in the same way as for every other group.
+In case you are using codeKB's rights management you should set the rights on that group to the lowest value of all other groups because a user always has at minimum anonymous rights in the system.
+[--]

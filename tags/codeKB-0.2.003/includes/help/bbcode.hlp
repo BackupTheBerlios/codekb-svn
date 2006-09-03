@@ -1,0 +1,176 @@
+[url=help.php]Help index[/url]
+
+[anker=top]
+[size=6]BBCodes[/size]
+[list]
+[*][url=#text]Text styles[/url]
+[*][url=#list]Lists[/url]
+[*][url=#url]URLs[/url]
+[*][url=#image]Images[/url]
+[*][url=#code]Code listings[/url]
+[*][url=#misc]Miscellaneous[/url]
+[/list]
+[--]
+HTML Code is not allowed in [url=help.php?on=entry]entries[/url] but you can use bbcodes to format your documentation.
+
+[anker=text][url=#top]^Top[/url]
+[size=5][b]Text styles[/b][/size]
+
+
+[b]Bold:[/b]
+[pre][b]Text[/b][/pre]
+
+To get your text bold use the b tag with opening and closing tag around the text. This can be used within all other tags.
+
+
+[i]Italic:[/i]
+[pre][i]Text[/i][/pre]
+
+With the i Tag you can emphasize your text. It will appear in italic font. This can be used within all other tags.
+
+
+[u]Underline:[/u]
+[pre][u]Text[/u][/pre]
+
+The u tag will underline your text. This can be used within all other tags.
+
+
+[pre]Monospace:[/pre]
+[pre][pre]Text[ /pre][/pre]
+
+To get your text written in monospace font use the pre tag. You can highlight keywords of small parts of code in your text. 
+Use the [url=#code]code[/url] tag for longer source code.
+
+
+Font size:
+[pre][size=X]Text[/size][/pre]
+
+To change the font fize of your text use the size tag and choose a number between 1 and 7.
+[size=1]Size 1[/size]
+[size=2]Size 2[/size]
+[size=3]Size 3[/size]
+[size=4]Size 4[/size]
+[size=5]Size 5[/size]
+[size=6]Size 6[/size]
+[size=7]Size 7[/size]
+
+[--]
+[anker=list][url=#top]^Top[/url]
+[size=5][b]Lists[/b][/size]
+
+You can choose between two types of lists - an unordered and an ordered.
+With [ list] you can start the unordered list.
+To mark a new entry in your list use the [pre][*][/pre] tag. Every * will force a new line with a list bullet in front. Close your list with [/list].
+[pre][list][/pre]
+[-][pre][*]Item 1[/pre]
+[-][pre][*]Item 2
+[/list][/pre]
+will become:[list]
+[*]Item 1
+[*]Item 2
+[/list]You can do the same with numbers instead of bullets by using the [pre][olist][/pre] tag. This will result in:
+[olist]
+[*]Item 1
+[*]Item 2
+[/olist]You can even create nested lists:
+[pre][list]
+[*]Item 1[/pre]
+[-][pre][list][/pre]
+[-][-][pre][*] subitem[/pre]
+[-][-][pre][list][/pre]
+[-][-][-][pre][*] subsubitem[/pre]
+[-][-][pre][/list][/pre]
+[-][pre][/list][/pre]
+[-][pre][*]Item 2
+[/list][/pre]
+will display
+[list]
+[*]Item 1
+[list]
+[*] subitem
+[list]
+[*] subsubitem
+[/list]
+[/list]
+[*]Item 2
+[/list]
+[--]
+[anker=url][url=#top]^Top[/url]
+[size=5][b]URLs[/b][/size]
+
+With the url and img tags you can add hyperlinks and images to your text.
+[pre][url]http://thiem-net.de[/url][/pre] will add this link: [url]http://thiem-net.de[/url].
+You can also give your link a name by using the url tag like this:
+[pre][url=http://thiem-net.de]This is a link[/url][/pre]
+this will result in [url=http://thiem-net.de]This is a link[/url].
+With the text style tags you can format the link title:
+[pre][url=http://thiem-net.de][b]This[/b] [i]is[/i] [pre]a link[ /pre][/url][/pre]
+[url=http://thiem-net.de][b]This[/b] [i]is[/i] [pre]a link[/pre][/url]
+
+To navigate through a big documentation you can set ankers like the ^Top link here.
+Set an anker with [pre][anker=test][/pre] in your text and a url with [pre][url=#test]Go to test[/url][/pre] and you will be able to jump to your anker by clicking the url.
+[--]
+[anker=image][url=#top]^Top[/url]
+[size=5][b]Images[/b][/size]
+
+To add an image use the img tag: [pre][img]images/icons/category.png[/img][/pre]
+This will display the image [img]images/icons/category.png[/img].
+In the same way as the url tag you can use the img tag like this: 
+[pre][img=images/icons/category.png]This is an image[/img][/pre]
+With that you can display the same image but with a title (move your mouse over the image) [img=images/icons/category.png]This is an image[/img]
+
+You can also combine urls and images:
+[pre][url=http://thiem-net.de][img=images/icons/category.png]This is a linked image[/img][/url][/pre]
+Link with image: [url=http://thiem-net.de][img=images/icons/category.png]This is a linked image[/img][/url]
+[--]
+[anker=code][url=#top]^Top[/url]
+[size=5][b]Code listings[/b][/size]
+
+The pre tag is useful to emphasize single code keywords within a text but for longer code listings you should use [pre][code][/pre].
+A text within [pre][code] [/code][/pre] will be displayed in an extra container with line numbers and - if you want - with code highlighting.
+A simple example:
+[pre][code]This a just a simple test[/code][/pre]
+[code]This a just a simple test[/code]
+Without an option the code tag will use plain text without highlight. 
+Use [pre][code=language] [/code][/pre] to highlight one of the following languages:
+bash, batch, c, cpp, diff, html, ini, java, javascript, perl, php, python, sql, tcl, text, vb, xml
+Example with php code ([pre][code=php][/pre]):
+[code=php]public function get() {
+			
+	$ckb = $this->_content;
+			
+	$code = $this->_template;
+			
+	// if clause and variable replacement
+
+	$code = str_replace("\"", "\\\"", $code);
+	$code = preg_replace("/<if[\s]*(.*)>/", "\"; if ( \$1 ) { \$out .= \"", $code); 
+	$code = preg_replace("/<else>/", "\"; } else { \$out .= \"", $code); 
+	$code = preg_replace("/<\/if>/", "\"; }; \$out .= \"", $code); 
+
+	$out = false;
+ 
+	if (!eval("\$out = \"".$code."\"; return true;"))
+		throw new CodeKBException(__METHOD__, "general", "error");
+			
+	return $out;
+			
+} // get[/code]
+[--]
+[anker=misc][url=#top]^Top[/url]
+[size=5][b]Miscellaneous[/b][/size]
+
+Other useful tags:
+
+With [pre][center]Text[/center][/pre] you can center your text on the screen.
+[center]This Text is centered[/center]
+
+With the [pre][-][/pre] you can insert a tab (two or more whitespaces will always be cut down to one single).
+Use the tag more than once to indent your text in several levels.
+[-]One time
+[-][-]Two times
+[-][-][-]Three times...
+
+And a last tag you could use to decorate your documentation is the horizontal line you see between the sections. 
+You can get it by using [pre][--][/pre].
+[--]
