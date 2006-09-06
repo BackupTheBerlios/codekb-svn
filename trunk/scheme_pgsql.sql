@@ -76,7 +76,7 @@ CREATE TABLE entries (
     documentation text,
     created timestamp without time zone NOT NULL,
     modified timestamp without time zone
-);
+) WITH OIDS;
 
 CREATE TABLE entry_cat (
     cat integer NOT NULL,

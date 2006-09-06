@@ -4,7 +4,7 @@
 $conf['general']['basepath'] = ".";												// absolute path to codeKB
 $conf['general']['wwwpath'] = "/codeKB";											// www document root of codeKB
 $conf['general']['imagepath'] = $conf['general']['wwwpath']."/images";								// path to images
-$conf['general']['language'] = "phrases.php";											// language phrase file
+$conf['general']['language'] = "phrases_en.php";										// language phrase file
 $conf['general']['rewrite'] = true;												// use mod_rewrite?
 $conf['general']['title'] = "codeKB - Source Code Knowledge Base";								// browser title
 $conf['general']['stylesheet'] = "codekb.css";											// relative stylesheet path 
@@ -19,7 +19,7 @@ $conf['db']['user'] = "";
 $conf['db']['pass'] = "";
 
 // access settings
-$conf['access']['admin'] = array("");												// admin user - empty for no restrictions
+$conf['access']['admin'] = array();												// admin user - empty for no restrictions
 
 // file settings
 $conf['file']['path'] = $conf['general']['basepath']."/data/"; 									// secured file storage

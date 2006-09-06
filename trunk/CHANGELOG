@@ -5,6 +5,24 @@ There will be instructions if you want to upgrade below each release if there
 are special things you have to do.
 
 
+codeKB 0.2.004 (2006-09-06)
+---------------------------
+
+Fixed:
+
+- Postgresql scheme did not work! No entries could be added.
+
+- Default config had phrases.php instead of phrases_en.php
+
+
+Upgrade Instructions (from 0.2.003)
+
+Since nobody seems to use pgsql version there are no special instructions. 
+So only the scheme_pgsql contains the fix.
+
+---
+
+
 codeKB 0.2.003 (2006-09-03)
 ---------------------------
 
