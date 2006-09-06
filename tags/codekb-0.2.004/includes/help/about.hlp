@@ -1,0 +1,16 @@
+[url=help.php]Help index[/url]
+
+[center][size=6]codeKB Help[/size][/center]
+
+[b][i]What is it?[/i][/b]
+codeKB stands for 'source code knowledge base'. It was designed to keep all of your code snippets, short liners and algorithms together in one place where you can find them easily.
+Ever wanted to patch that new version of a package with the patch you wrote a month ago - it is gone for sure ;)
+Put them all in here and you can organize your code knowledge.
+
+[b][i]What is it not?[/i][/b]
+codeKB is not a tool like svn or cvs. It is not designed to keep whole projects or many code files that belong together. It don't has a revisioning system or anything like that. It's only for algorithms, patches and snippets. Go and use svn instead.
+
+[b][i]How does it work?[/i][/b]
+codeKB is a easy to use web application based on php. All of its content is stored in [url=help.php?on=entry]entries[/url] which can contain documentation of your source code and of course the code itself.
+Entries are organized in [url=help.php?on=category]categories[/url] to store them semantically. Because one code often suits to several categories entries can linked in different categories.
+codeKB has a simple user management system with [url=help.php?on=rights#user]users[/url] and [url=help.php?on=rights#group]groups[/url] to define fine grained access rights for users on categories and the entries in there.

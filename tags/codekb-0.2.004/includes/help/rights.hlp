@@ -1,0 +1,50 @@
+[url=help.php]Help index[/url]
+
+[anker=top]
+[size=6]Access rights[/size]
+[list]
+[*][url=#why]Why access rights?[/url]
+[*][url=#user]Users[/url]
+[*][url=#group]Groups[/url]
+[/list]
+[--]
+[anker=why][url=#top]^Top[/url]
+
+[b]Why access rights?[/b]
+
+From the beginning on codeKB was designed with an user and rights management system. It may be quite simple and low tech but it is an important part of codeKB.
+By adding [url=user]users[/url] and [url=group]groups[/url] you have the possibility to use codeKB with lots of other people building a powerful database of all their (coding) knowledge.
+Doing this without access rights could end in an total lost of all your data...
+Now you can specify which user (or better which group) is allowed to:
+[list]
+[*]actually see a category
+[*]add new categories
+[*]change a category
+[*]delete a category
+[*]add new entries
+[*]change entries
+[*]delete entries
+[*]and download attached files
+[/list]All settings are per group and category. So you can give groupA full rights on categoryA and groupB on categoryB but not vice versa. Or you can use codeKB as your private source code safe letting anonymous users see just a small potion of your stuff.
+If you don't want to use all this user and group stuff simply leave the default settings or - if changed - give anonymous full access rights and there will be no access restriction.
+Access rights can only be changed by an [url=help.php?on=admin]admin[/url] user. A normal user only sets rights implicitly by creating a new [url=help.php?on=category]category[/url] (it will be have the same restrictions as its parent) or placing [url=help.php?on=entry]entries[/url] in a category where others don't have access.
+[--]
+[anker=user][url=#top]^Top[/url]
+
+[b]Users[/b]
+
+In case you want to use the access restrictions every user of your codeKB system should have its own account. Then you can add him to one or more user [url=group]groups[/url] to specify his access rights.
+His name will be inserted when he adds a new [url=help.php?on=entry]entry[/url] without mentioning an author.
+A user can be logged in per session or can choose to create a browser cookie to stay logged in on the same pc.
+To create a new user account go to [url=login.php?action=register]register[/url].
+[url=help.php?on=admin]Admin[/url] users will be able to change or delete a user but they never can read its password (they only can set a new one).
+[--]
+[anker=group][url=#top]^Top[/url]
+
+[b]Groups[/b]
+
+To actually restrict access a [url=help.php?on=user]user[/url] has to be in a user group. A group has rights on every existing category which can be changed by an [url=help.php?on=admin]admin[/url] user.
+A user can be member of more than one group to avoid having one group for every user.
+The rights a user has in a [url=help.php?on=category]category[/url] or an [url=help.php?on=entry]entry[/url] will be always the maximum of all groups he is in. In addition when an anonymous user has more rights than the logged in user he will gain these rights.
+So in case you want to use the system for user banning be sure that anonymous users only can 'see' or even less.
+[--]
